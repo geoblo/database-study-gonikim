@@ -103,5 +103,40 @@ WHERE name IS NOT NULL;
 -- TRUE/FALSE의 논리 연산
 -- TRUE(참: 1), FALSE(거짓: 0)
 
+-- AND 연산: 둘 다 참이어야 참
+SELECT TRUE AND TRUE;
+SELECT TRUE AND FALSE;
+SELECT FALSE AND TRUE;
+SELECT FALSE AND FALSE;
+
+-- OR 연산: 둘 중 하나만 참이면 참
+SELECT TRUE OR TRUE;
+SELECT TRUE OR FALSE;
+SELECT FALSE OR TRUE;
+SELECT FALSE OR FALSE;
+
+-- Quiz: 5500원 보다 싸고, 동시에 단백질량이 25g 보다 많은 버거
+SELECT *
+FROM burgers
+WHERE price < 5500 AND protein > 25;
+
+-- Quiz: 5500원 보다 싸거나, 단백질량이 25g 보다 많은 버거
+SELECT *
+FROM burgers
+WHERE price < 5500 OR protein > 25;
+
+-- Quiz: 단백질량이 25g 보다 많지 않은 버거
+SELECT *
+FROM burgers
+WHERE NOT protein > 25;
+
+
+
+
+
+
+
+
+
 
 
