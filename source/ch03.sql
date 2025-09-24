@@ -129,6 +129,29 @@ WHERE price < 5500 OR protein > 25;
 SELECT *
 FROM burgers
 WHERE NOT protein > 25;
+-- WHERE !(protein > 25); -- (참고) &&, ||, !는 MySQL에서만 작동
+-- 가독성과 이식성을 위해서는 AND, OR, NOT을 사용하는 것이 가장 안전
+
+-- 3) 산술 연산자
+-- 사칙 연산 등을 위한 수학적 연산 기호
+-- WHERE 절과 SELECT 절에서 사용 가능
+SELECT 100 + 20; -- 120
+SELECT 100 - 20; -- 80
+SELECT 100 * 20; -- 2000
+SELECT 100 / 20; -- 5.0000
+SELECT 100 % 20; -- 0
+
+-- 산술 연산자 활용 예
+-- SELECT 문에서의 산술 연산 예시
+SELECT *, price / gram * 100 AS `price/100g` -- 따옴표("", '') 또는 백틱(``)으로 감싸기
+FROM burgers;
+-- 100g당 가격을 계산하여 price/100g 이라는 별칭(alias)으로 반환함
+
+-- WHERE 절에서 산술 연산 예시
+-- 가격에 10%를 더한 값이 6500원을 넘는 버거 조회
+
+
+-- 짝수 ID를 가진 버거만 조회
 
 
 
