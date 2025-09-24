@@ -111,7 +111,49 @@ DESC burgers; -- burgers 테이블의 구조를 설명해줘
 -- Default: 컬럼의 기본값(입력값이 없을 시 설정할 기본값)
 -- Extra: 추가 설정(컬럼에 적용된 추가 속성)
 
+-- 테이블 목록 조회하기
+SHOW TABLES;
 
+-- (참고) 테이블 변경하기
+-- ALTER TABLE: 이미 만든 테이블의 구조 변경
+-- 예: 포인트 제도가 새로 생겨서 고객 테이블에 point 열을 추가해야 할 때
+
+-- 열(column) 추가하기 - ADD COLUMN
+-- burgers 테이블에 set_price(세트 메뉴 가격) 컬럼 추가
+ALTER TABLE burgers
+ADD COLUMN set_price INT NOT NULL DEFAULT 0;
+
+-- 열(column) 데이터 타입 변경하기 - MODIFY COLUMN
+-- burgers 테이블의 name 컬럼을 더 길게 만들어야 한다면?
+ALTER TABLE burgers
+MODIFY COLUMN name VARCHAR(100);
+
+-- 열(column) 삭제하기 - DROP COLUMN
+-- set_price(세트 메뉴 가격) 컬럼 제거
+ALTER TABLE burgers
+DROP COLUMN set_price;
+
+DESCRIBE burgers;
+
+-- 주의! ALTER TABLE은 유용한 기능이지만, 조심해서 사용해야 함
+-- 수백만, 수천만 건의 데이터가 들어 있는 거대한 테이블의 구조를 변경하는 작업은 많은 시간과 시스템 자원을 소모
+-- 작업 중에는 테이블이 잠겨서 서비스가 일시적으로 멈출 수도 있음
+-- 따라서 실무에서는 사용자가 적은 새벽 시간을 이용해 점검 시간에 맞춰 작업하는 것이 일반적
+
+-- 단일 데이터 삽입하기
+-- INSERT INTO 테이블명 (컬럼명1, 컬럼명2, ...)
+-- VALUES (입력값1, 입력값2, ...);
+
+-- 컬럼 순서와 개수에 맞게 값 입력
+INSERT INTO burgers (id, name, price, gram, kcal, protein)
+VALUES (1, '빅맨', 5300, 223, 583, 27);
+
+-- 데이터 조회하기
+-- SELECT 컬럼명1, 컬럼명2, ... -- 조회할 컬럼(컬럼명 대신 *을 쓰면 모든 컬럼 조회)
+-- FROM 테이블명
+-- WHERE 조건; -- 검색 조건(생략하면 전체 조회)
+
+-- burgers 테이블의 모든 컬럼 조회
 
 
 
