@@ -170,11 +170,56 @@ WHERE id = 5;
 -- 암기X(쓰다 보면 자연스럽게 익혀짐)
 -- 애매하면 최우선 순위 ()를 사용 - 필요하면 우선순위 표를 찾아보면 됨
 
+-- 괄호 > 산술(*, /, %) > 산술(+, -) > 비교 > 논리(AND) > 논리(OR)
+
 -- Quiz: 다음 쿼리의 수행 결과는?
-SELECT 3 + 5 * 2;
-SELECT (3 + 5) * 2;
-SELECT TRUE OR TRUE AND FALSE;
-SELECT (TRUE OR TRUE) AND FALSE;
+SELECT 3 + 5 * 2; -- 13
+SELECT (3 + 5) * 2; -- 16
+SELECT TRUE OR TRUE AND FALSE; -- 1
+SELECT (TRUE OR TRUE) AND FALSE; -- 0
+
+-- Quiz
+-- 1. 다음 빈칸에 들어갈 용어는? (입력 예: ㄱㄴㄷㄹㅁ)
+-- ① __________: 테이블 조회 시 필터링 조건을 작성하기 위해 사용하는 명령 
+-- ② __________: 같지 않음을 비교하는 연산자
+-- ③ __________: 두 조건을 동시에 만족하는 논리 연산자
+-- ④ __________: 두 조건 중 하나라도 만족하는 논리 연산자
+-- ⑤ __________: 특정 조건을 만족하지 않는 논리 연산자
+
+-- (ㄱ) AND
+-- (ᄂ) !=
+-- (ᄃ) NOT
+-- (ᄅ) WHERE
+-- (ᄆ) OR
+
+-- 정답:
 
 
+
+/*
+	3.2 데이터 필터링 실습: 대학 DB
+*/
+
+-- Quiz: 대학 DB 만들기
+-- university DB 생성 및 진입
+CREATE DATABASE university;
+USE university;
+
+-- students 테이블 생성
+-- id: 아이디(정수형 숫자)
+-- nickname: 닉네임(문자형: 최대 50자)
+-- math: 수학 성적(정수형 숫자)
+-- english: 영어 성적(정수형 숫자)
+-- programming: 프로그래밍 성적(정수형 숫자)
+-- 기본키 지정: id
+
+-- students 데이터 삽입
+	(1, 'Sparkles', 98, 96, 93),
+	(2, 'Soldier', 82, 66, 98),
+	(3, 'Lapooheart', 84, 70, 82),
+	(4, 'Slick', 87, 99, 98),
+	(5, 'Smile', 75, 73, 70),
+	(6, 'Jellyboo', 84, 82, 70),
+	(7, 'Bagel', 97, 91, 87),
+	(8, 'Queen', 99, 100, 88);
 
