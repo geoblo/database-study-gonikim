@@ -277,17 +277,30 @@ SELECT * FROM burgers;
 -- (ᄅ) SELECT 문
 -- (ᄆ) DROP DATABASE 문
 
--- 정답: 
+-- 정답: ㄷㄹㄱㄴㅁ 
 
 
+-- (참고) DROP TABLE vs TRUNCATE TABLE
+-- 테이블을 다루다 보면 테이블의 내용을 비워야 할 때가 있음
 
+-- DROP TABLE: 테이블의 존재 자체를 삭제
+-- DROP TABLE burgers; 를 실행하면, burgers 테이블의 모든 데이터는 물론, burgers 라는 테이블의 구조까지 완전히 사라짐
+-- 테이블을 다시 사용하려면 CREATE TABLE 부터 다시 해야 함(마치 건물을 통째로 철거하는 것과 같음)
 
+-- TRUNCATE TABLE: 테이블의 구조는 남기고, 내부 데이터만 모두 삭제
+-- TRUNCATE TABLE burgers; 를 실행하면, burgers 테이블 안의 모든 데이터가 순식간에 사라짐
+-- 하지만 burgers 라는 테이블의 구조(열, 제약조건 등)는 그대로 남아있어서, 바로 새로운 데이터를 INSERT 할 수 있음(건물의 내부만 싹 비우고 뼈대는 그대로 두는 것과 같음)
 
+-- 정리: 
+-- 테스트 데이터를 모두 지우고 처음부터 다시 시작하고 싶을 때는 TRUNCATE 가 유용하고, 
+-- 테이블 자체가 더 이상 필요 없을 때는 DROP 을 사용
 
+-- (추가 설명) DELETE vs TRUNCATE
+-- DELETE FROM burgers; (WHERE 절 없는 DELETE)와 결과적으로는 같아 보이지만, TRUNCATE 가 훨씬 빠름
+-- DELETE 는 한 줄씩 지우면서 삭제 기록을 남기는 반면, TRUNCATE 는 테이블을 초기화하는 개념이라 내부 처리 방식이 더 간단하고 빠름
+-- TRUNCATE 는 AUTO_INCREMENT 값도 초기화
+-- 만약 burgers 테이블에 1000개의 데이터가 있어서 다음 id가 1001일 차례였다면, TRUNCATE 이후에는 다시 1부터 시작(DELETE는 AUTO_INCREMENT 값을 초기화하지 않는다.)
 
-
-
-
-
-
-
+-- 정리: 
+-- "탈퇴한 회원 한 명의 정보만 지우고 싶다" 또는 "특정 조건에 맞는 주문 기록만 삭제하고 싶다" 와 같이 선별적인 삭제가 필요할 때는 DELETE를 사용(일반적인 비즈니스 로직은 항상 DELETE를 사용)
+-- "테스트용으로 넣었던 수백만 건의 데이터를 모두 지우고 처음부터 다시 시작하고 싶다" 와 같이 테이블의 모든 데이터를 깨끗하게 비울 목적이라면 TRUNCATE가 훨씬 빠르고 효율적
