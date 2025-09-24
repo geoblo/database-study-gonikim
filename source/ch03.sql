@@ -47,3 +47,61 @@ VALUES
 	(3, '맨스파이시 상해 버거', 5300, 235, 494, 20),
 	(4, '슈비두밥 버거', 6200, 269, 563, 21),
 	(5, '더블 쿼터파운드 치즈', 7700, 275, 770, 50);
+    
+-- 모든 버거 조회
+SELECT * FROM burgers;
+
+-- 1) 비교 연산자
+-- 두 값을 비교하는 연산 기호
+-- WHERE 절에 사용하여 특정 데이터로 필터링 가능
+-- 종류: =, !=, >, >=, <, <=
+
+-- Quiz: 가격이 5500원 보다 비싼 버거 찾기
+SELECT *
+FROM burgers
+WHERE price > 5500;
+
+-- Quiz: 가격이 5500원 보다 싼 버거 찾기
+SELECT *
+FROM burgers
+WHERE price < 5500;
+
+-- Quiz: 단백질량이 25g 보다 적은 버거 찾기
+SELECT *
+FROM burgers
+WHERE protein < 25;
+
+-- (참고) NULL 비교에 대해
+-- NULL은 데이터베이스에서 '값이 없음'을 나타내는 특별한 상태
+-- NULL은 특정 값이 아니기 때문에 등호(=)로 비교할 수 없음
+INSERT INTO burgers (id, name, price, gram, kcal, protein)
+VALUES (6, null, 5000, 222, 522, 22);
+
+SELECT *
+FROM burgers
+WHERE name = NULL;
+
+-- 이런 문제를 해결하기 위해 SQL은 'IS NULL' 이라는 특별한 키워드를 제공함
+-- IS NULL: 해당 열의 값이 NULL 인 행을 찾음
+-- IS NOT NULL: 해당 열의 값이 NULL 이 아닌, 즉 데이터가 입력된 행을 찾음
+SELECT *
+FROM burgers
+WHERE name IS NULL;
+
+SELECT *
+FROM burgers
+WHERE name IS NOT NULL;
+
+-- 2) 논리 연산자
+-- 조건을 조합하거나 반전하여 새 조건을 만듦
+-- 종류: AND, OR, NOT
+-- 사용 예
+-- 조건A AND 조건B: 조건A와 조건B를 동시에 만족하는 데이터 필터링(교집합)
+-- 조건A OR 조건B: 조건A와 조건B 중 하나라도 만족하는 데이터 필터링(합집합)
+-- NOT 조건A: 조건A를 만족하지 않는 데이터 필터링(여집합)
+
+-- TRUE/FALSE의 논리 연산
+-- TRUE(참: 1), FALSE(거짓: 0)
+
+
+
