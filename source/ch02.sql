@@ -69,11 +69,47 @@ DROP DATABASE mapdonalds;
 -- ④ MySQL은 쿼리의 대소문자를 구분한다.
 -- ⑤ 주석은 쿼리 실행에 영향을 미치지 않는다.
 
--- 정답: 
+-- 정답: 4
 
 
+/*
+	2.3 데이터 삽입 및 조회하기
+*/
+-- Quiz: 다시 mapdonalds DB 생성 및 진입
+CREATE DATABASE mapdonalds;
+USE mapdonalds;
 
+-- 테이블 생성
+-- CREATE TABLE 테이블명 (
+-- 	컬럼명1 자료형1,
+--     컬럼명2 자료형2,
+--     ...
+--     PRIMARY KEY (컬럼명)
+-- );
+CREATE TABLE burgers (
+	id INTEGER, -- 아이디(정수)
+    -- id INT PRIMARY KEY, -- 또는 이렇게 써도 가능
+    name VARCHAR(50), -- 이름(최대 50글자의 문자)
+    -- VARCHAR(N): 문자를 최대 N자리까지 저장(가변 길이 타입이라 저장될 수 있는 최대 길이의 제한을 알려줘야 함)
+    price INTEGER, -- 가격(정수)
+    gram INTEGER, -- 무게(정수)
+    kcal INTEGER, -- 열량(정수)
+    protein INTEGER, -- 단백질량(정수)
+    PRIMARY KEY (id) -- 기본키 지정(필수!): id
+);
+-- 기본키: 레코드(row)를 대표하는 컬럼(예: 사람의 주민등록번호, 학생의 학번, 군인의 군번, 사원의 사번)
+-- 테이블에 저장된 모든 버거를 구분하기 위한 컬럼
+-- 중복되지 않는 값을 가짐
 
+-- 테이블 구조 조회
+-- DESC 테이블명;
+DESC burgers; -- burgers 테이블의 구조를 설명해줘
+-- Field: 테이블의 컬럼
+-- Type: 컬럼의 자료형(int는 INTEGER의 별칭)
+-- Null: 컬럼에 빈 값을 넣어도 되는지. 즉, 입력값이 없어도 되는지 여부(기본키는 NO: 반드시 값이 들어가야 함)
+-- Key: 대표성을 가진 컬럼(기본키, 외래키, 고유키 등의 특별한 대표성을 가지는지를 의미)
+-- Default: 컬럼의 기본값(입력값이 없을 시 설정할 기본값)
+-- Extra: 추가 설정(컬럼에 적용된 추가 속성)
 
 
 
