@@ -149,17 +149,32 @@ FROM burgers;
 
 -- WHERE 절에서 산술 연산 예시
 -- 가격에 10%를 더한 값이 6500원을 넘는 버거 조회
-
+SELECT *
+FROM burgers
+WHERE (price * 1.1) > 6500;
 
 -- 짝수 ID를 가진 버거만 조회
+SELECT *
+FROM burgers
+WHERE id % 2 = 0;
 
+-- UPDATE 문에서 산술 연산 예시
+-- id가 5인 버거의 가격을 500원 인하
+UPDATE burgers
+SET price = price - 500
+WHERE id = 5;
 
+-- 4) 연산자의 우선순위
+-- 어떤 연산자를 먼저 수행할 것인가의 기준
+-- 우선순위가 높은 것부터 낮은 순으로 수행
+-- 암기X(쓰다 보면 자연스럽게 익혀짐)
+-- 애매하면 최우선 순위 ()를 사용 - 필요하면 우선순위 표를 찾아보면 됨
 
-
-
-
-
-
+-- Quiz: 다음 쿼리의 수행 결과는?
+SELECT 3 + 5 * 2;
+SELECT (3 + 5) * 2;
+SELECT TRUE OR TRUE AND FALSE;
+SELECT (TRUE OR TRUE) AND FALSE;
 
 
 
