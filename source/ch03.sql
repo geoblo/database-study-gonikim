@@ -236,14 +236,30 @@ SELECT * FROM students;
 
 -- Quiz: 필터링 연습!
 -- 1. 모든 과목 성적이 90점 이상인 학생은?
+SELECT *
+FROM students
+WHERE math >= 90 AND english >= 90 AND programming >= 90;
 
 -- 2. 75점 미만이 하나라도 있는 학생은?
+SELECT *
+FROM students
+WHERE math < 75 OR english < 75 OR programming < 75;
 
 -- 3. 모든 학생의 총점은?
+SELECT *, math + english + programming AS 총점
+FROM students;
 
 -- 4. 모든 학생의 평균은?
+SELECT *, (math + english + programming) / 3 AS 평균
+FROM students;
 
 -- 5. 총점이 270 이상인 학생의 닉네임, 총점, 평균은?
+SELECT 
+	nickname AS 닉네임, 
+    math + english + programming AS 총점,
+    (math + english + programming) / 3 AS 평균
+FROM students
+WHERE (math + english + programming) >= 270;
 
 -- 별칭 부여하기: AS 키워드
 -- SELECT 컬럼명 AS 별칭
@@ -256,13 +272,13 @@ SELECT * FROM students;
 -- 2. 다음 쿼리에 대한 설명으로 옳지 않은 것을 모두 고르면?
 SELECT id, nickname, (math + english + programming) / 3 AS '중간고사 평균' 
 FROM students
-WHERE math > 80 AND programming > 80 OR English > 90;
+WHERE math > 80 AND programming > 80 OR english > 90;
 
 -- ① students 테이블에서 데이터를 조회하고 있다.
 -- ② math가 80보다 높은 학생은 반드시 조회된다.
 -- ③ english가 90보다 높은 학생은 조회될 수 있다.
--- ④ 이 쿼리를 실행하면 그 결과로 칼럼 3개가 조회된다.
+-- ④ 이 쿼리를 실행하면 그 결과로 컬럼 3개가 조회된다.
 -- ⑤ SELECT 절의 '(math + english + programming) / 3' 수식에 괄호를 삭제하고 조회해도 정상적으로 중간고사 평균이 계산된다.
 
--- 정답:
+-- 정답: 2, 5
 
