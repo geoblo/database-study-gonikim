@@ -14,7 +14,7 @@ WHERE price > 100000 AND price <= 500000;
 -- ③ 가격이 100,000원 이하 500,000원 초과인 제품
 -- ④ 가격이 100,000원 미만 500,000원 이하인 제품
 
--- 정답: 
+-- 정답: 1
 
 
 -- 문제 2
@@ -29,7 +29,7 @@ WHERE stock != 0;
 -- ③ 모든 제품이 조회된다.
 -- ④ 재고(stock)가 NULL인 제품만 조회된다.
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 3
@@ -44,8 +44,9 @@ WHERE price < 20000 OR price > 50000 AND stock <= 20;
 -- ③ 가격이 50,000원을 초과하고 재고가 20개 이하이거나, 가격이 20,000원 미만인 제품
 -- ④ 가격이 50,000원을 초과하고 재고가 20개 초과인 제품
 
--- 정답: 
-
+-- 정답: 3
+-- AND가 OR보다 우선순위가 높으므로 (price > 50000 AND stock <= 20) 조건이 먼저 평가된 후, 
+-- 그 결과를 OR price < 20000 조건과 결합합니다.
 
 -- 문제 4
 -- 다음 쿼리의 결과를 올바르게 해석한 것은 무엇입니까?
@@ -59,8 +60,9 @@ WHERE (category = '전자기기' OR category = '가구') AND price >= 50000;
 -- ③ 가격이 50,000원 이상인 제품 중 카테고리가 '전자기기' 또는 '가구'가 아닌 제품
 -- ④ 카테고리가 '전자기기' 또는 '가구'이거나, 가격이 50,000원 이상인 제품
 
--- 정답: 
-
+-- 정답: 2
+-- OR이 괄호로 묶여 있으므로 (category = '전자기기' OR category = '가구')가 먼저 평가되고, 
+-- 그 결과에서 AND price >= 50000 조건이 적용됩니다.
 
 -- 문제 5
 -- 다음 쿼리에서 WHERE 조건을 만족하는 데이터는 무엇입니까?
@@ -74,8 +76,9 @@ WHERE (price * 0.9 > 30000 OR stock <= 20) AND NOT (price < 10000);
 -- ③ 할인 후 가격(price * 0.9)이 30,000원 이하이고, 재고가 20개 초과이며, 가격이 10,000원 미만인 제품
 -- ④ 할인 후 가격(price * 0.9)이 30,000원 이하이고, 재고가 20개 초과하며, 가격이 10,000원 이상인 제품
 
--- 정답: 
-
+-- 정답: 2
+-- price * 0.9 > 30000과 stock <= 20가 OR로 먼저 계산되고, 
+-- NOT 조건이 price < 10000을 부정하여 price >= 10000로 평가됩니다.
 
 -- 2. 데이터 필터링 연습 문제
 
@@ -111,42 +114,53 @@ VALUES
 -- 가격이 300,000원 이상인 제품명과 가격을 조회하세요.
 
 -- 정답:
-
+SELECT name, price
+FROM products
+WHERE price >= 300000;
 
 
 -- 문제 2
 -- 카테고리가 '전자기기'이고 재고가 10개 이상인 제품명과 재고를 조회하세요.
 
 -- 정답:
-
+SELECT name, stock
+FROM products
+WHERE category = '전자기기' AND stock >= 10;
 
 
 -- 문제 3
 -- 가격에 10% 세금을 적용한 최종 가격을 계산해 제품명과 함께 조회하세요.
 
 -- 정답:
-
+SELECT name, price * 1.1 AS final_price
+FROM products;
 
 
 -- 문제 4
 -- 카테고리가 '전자기기'가 아닌 제품을 찾아 제품명과 카테고리를 조회하세요.
 
 -- 정답:
-
+SELECT name, category
+FROM products
+WHERE NOT category = '전자기기';
 
 
 -- 문제 5
 -- 재고가 10개 이하인 제품 중 가격을 20% 할인해 제품명과 가격을 조회하세요.
 
 -- 정답:
-
+SELECT name, price * 0.8 AS discounted_price
+FROM products
+WHERE stock <= 10;
 
 
 -- 문제 6
 -- 카테고리가 '생활용품'이고 가격이 100,000원 이상이거나, 재고가 50개 이상인 제품의 제품명, 카테고리, 재고를 조회하세요.
 
 -- 정답: 
-
+SELECT name, category, stock
+FROM products
+WHERE (category = '생활용품' AND price >= 100000) OR stock >= 50;
 
 
 -- 문제 7
@@ -154,12 +168,15 @@ VALUES
 -- 해당 제품의 제품명, 재고, 할인된 가격을 조회하세요.
 
 -- 정답:
-
+SELECT name, stock, price * 0.7 AS final_price
+FROM products
+WHERE category = '전자기기' AND stock <= 10;
 
 
 -- 문제 8
 -- 각 제품의 재고를 모두 소진했을 때 매출을 구해 제품명과 총판매액을 출력하세요.
 
 -- 정답:
-
+SELECT name, price * stock AS total_sales_amount
+FROM products;
 
