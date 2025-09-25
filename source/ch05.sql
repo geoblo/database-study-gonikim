@@ -196,13 +196,13 @@ CREATE TABLE memberships (
 
 -- Quiz: 사용자 프로필(user_profiles) 테이블 생성
 CREATE TABLE user_profiles (
-	id, -- 아이디(표준 정수)
-    email, -- 이메일(가변 길이 문자: 최대 255자)
-    phone_number, -- 전화번호(고정 길이 문자: 13자)
-    self_introduction, -- 자기소개(긴 문자열: 최대 64KB)
-    profile_picture, -- 프로필 사진(파일: 최대 16MB)
-    gender, -- 성별(선택 목록 중 택 1)
-    -- 기본키 지정: id
+	id INT, -- 아이디(표준 정수)
+    email VARCHAR(255), -- 이메일(가변 길이 문자: 최대 255자)
+    phone_number CHAR(13), -- 전화번호(고정 길이 문자: 13자)
+    self_introduction TEXT, -- 자기소개(긴 문자열: 최대 64KB)
+    profile_picture MEDIUMBLOB, -- 프로필 사진(파일: 최대 16MB)
+    gender ENUM('남', '여'), -- 성별(선택 목록 중 택 1)
+    PRIMARY KEY (id) -- 기본키 지정: id
 );
 
 -- 사용자 프로필(user_profiles) 데이터 삽입
@@ -265,12 +265,12 @@ FROM user_profiles;
 
 -- Quiz: 이벤트(events) 테이블 생성
 CREATE TABLE events (
-	id , 				-- 아이디(표준 정수)
-	event_name , 	-- 이벤트명(가변 길이 문자: 최대 100자)
-	event_date , 			-- 이벤트 일자(YYYY-MM-DD)
-	start_time , 			-- 이벤트 시간(hh:mm:ss)
-	created_at , 		-- 이벤트 등록 일시(YYYY-MM-DD hh:mm:ss)
-	event_year , 			-- 이벤트 연도(YYYY)
+	id INT, 				-- 아이디(표준 정수)
+	event_name VARCHAR(100), 	-- 이벤트명(가변 길이 문자: 최대 100자)
+	event_date DATE, 			-- 이벤트 일자(YYYY-MM-DD)
+	start_time TIME, 			-- 이벤트 시간(hh:mm:ss)
+	created_at DATETIME, 		-- 이벤트 등록 일시(YYYY-MM-DD hh:mm:ss)
+	event_year YEAR, 			-- 이벤트 연도(YYYY)
 	PRIMARY KEY (id) 			-- 기본키 지정: id
 );
 
@@ -287,10 +287,9 @@ FROM events;
 
 -- Quiz
 -- 1. 다음은 orders(주문)테이블을 생성하는 쿼리이다. 바르게 설명한 것을 모두 고르세요.
-
 CREATE TABLE orders (
 	id INTEGER,              -- 아이디
-	name VARCHAR (255), 	 -- 상품명
+	name VARCHAR(255), 	 -- 상품명
 	price DECIMAL(10, 2),    -- 가격
 	quantity INTEGER,        -- 주문 수량
 	customer_name CHAR(100), -- 고객명
@@ -305,7 +304,7 @@ CREATE TABLE orders (
 -- ④ customer_name이 100자보다 짧으면, 고객명을 저장하고 남은 만큼의 메모리 공간이 절약된다.
 -- ⑤ created_at에는 날짜와 시간 값을 모두 저장할 수 있다.
 
--- 정답:
+-- 정답: 1, 2, 5
 
 
 
