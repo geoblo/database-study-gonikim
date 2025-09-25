@@ -482,6 +482,11 @@ SELECT *
 FROM orders
 WHERE name >= '가' AND name < '나';
 
+-- 주의! 위 조건과 다른 의미
+SELECT *
+FROM orders
+WHERE name LIKE 'ㄱ%'; -- 'ㄱ'으로 시작하는 문자열 검색
+
 -- 테스트용 데이터
 INSERT INTO orders (id, name, price, quantity, created_at)
 VALUES
@@ -502,7 +507,7 @@ VALUES
 -- (ㄹ) EXTRACT()
 -- (ㅁ) TIME_TO_SEC()
 
--- 정답:
+-- 정답: ㄴㄷㄹㄱㅁ
 
 
 -- (참고)
