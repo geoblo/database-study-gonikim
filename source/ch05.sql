@@ -423,6 +423,15 @@ FROM orders;
 -- EXTRACT(필드 FROM 날짜): 입력 날짜에서 특정 '필드' 추출, 예: EXTRACT(YEAR FROM '2024-04-15') => 2024
 -- 필드: YEAR, MONTH, DAY, HOUR, MINUTE, SECOND 등
 
+-- 11월에 주문받은 상품 조회
+SELECT *
+FROM orders
+WHERE MONTH(created_at) = 11;
+
+-- 11월에 주문받은 상품의 개수 총합
+SELECT SUM(quantity)
+FROM orders
+WHERE MONTH(created_at) = 11;
 
 -- 3. 시간 필터링하기
 -- 예: 오전에 주문받은 매출 합계를 구하려면?
@@ -434,8 +443,15 @@ FROM orders;
 -- SECOND(시간): 입력 시간의 '초' 추출, 예: SECOND('2024-10-04 08:30:45') => 45
 -- TIME_TO_SEC(시간): 입력 시간의 시, 분, 초를 '초'로 환산, 예: TIME_TO_SEC('08:30:45') => 30645
 
+-- 오전에 주문받은 모든 상품 조회
+SELECT *
+FROM orders
+WHERE HOUR(created_at) < 12;
 
-
+-- 오전에 주문받은 모든 상품 매출의 합계 조회
+SELECT SUM(price * quantity)
+FROM orders
+WHERE HOUR(created_at) < 12;
 
 
 
