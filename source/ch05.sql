@@ -354,8 +354,85 @@ VALUES
 -- 데이터 조회
 SELECT * FROM orders;
 
+-- 1. 문자열 필터링하기
+-- 예: 상품명에 '케첩'이 포함된 주문을 조회하려면?
+
+-- 1) LIKE 연산자
+-- 컬럼에서 특정 패턴과 일치하는 대상(문자열)을 찾아 필터링 수행
+SELECT *
+FROM 테이블명
+WHERE 컬럼명 LIKE '찾는_패턴';
+
+-- 와일드 카드
+-- LIKE와 함께 사용하여 특정 패턴을 찾는 연산자
+-- %(퍼센트): 0개 또는 그 이상의 임의의 문자를 의미
+-- _(언더 스코어): 정확히 1개의 임의의 문자를 의미
+
+-- 사용 예
+-- LIKE '케첩%': '케첩'으로 시작하는 임의의 문자 => 케첩 소스
+-- LIKE '%케첩': '케첩'으로 끝나는 임의의 문자 => 토마토 케첩
+-- LIKE '%케첩%': '케첩'을 포함하는 임의의 문자 => 토마토 케첩 소스, 케첩 소스, 토마토 케첩
+-- LIKE '케첩_': '케첩'으로 시작하는 3글자 => 케첩병
+-- LIKE '_케첩': '케첩'으로 끝나는 3글자 => 꿀케첩
+
+-- 상품명이 '케첩'인 대상 찾기
+SELECT *
+FROM orders
+WHERE name LIKE '케첩';
+
+-- 상품명에 '케첩'이 포함된 대상 찾기
+SELECT *
+FROM orders
+WHERE name LIKE '%케첩%';
+
+-- (참고) NOT LIKE: 특정 패턴을 제외하고 검색
+-- 예: 서울특별시에 살지 않는 고객
+SELECT *
+FROM customers
+WHERE address NOT LIKE '서울특별시%';
+
+-- 2) 문자열 함수
+-- CONCAT(문자열1, 문자열2, ...): 문자열 합치기, 괄호 안에 전달된 여러 문자열을 순서대로 이어 붙여 하나의 문자열로 만듦
+SELECT name, price, CONCAT(name, ' / ', price, '원') AS name_and_price
+FROM orders;
+
+-- CONCAT_WS(구분자, 문자열1, 문자열2, ...): CONCAT과 비슷하지만, 첫 번째 인자로 '구분자'를 받아 각 문자열 사이에 자동으로 넣어줌
+-- (참고) MySQL 전용 함수, WS는 'With Separator'의 약자
+SELECT CONCAT_WS(' - ', name, price, quantity) AS order_details
+FROM orders;
+
+-- UPPER() / LOWER(): 문자열을 모두 대문자 또는 소문자로 변경
+-- 예: 이메일 검색 등에서 대소문자 구분 없이 비교해야 할 때 유용
+SELECT name, UPPER(name) AS upper_name
+FROM orders;
+
+-- LENGTH(): 문자열의 길이를 바이트 단위로 반환
+-- CHAR_LENGTH(): 글자 수를 반환
+-- (참고) UTF-8 인코딩 기준 한글은 3바이트
+SELECT name, CHAR_LENGTH(name) AS char_length, LENGTH(name) AS byte_length
+FROM orders;
+
+-- 2. 날짜 필터링하기
+-- 예: 11월에 주문받은 상품 개수의 합을 구하려면?
+
+-- 1) 날짜 함수
+-- 입력받은 날짜에서 연도, 월, 일을 추출
+-- YEAR(날짜): 입력 날짜의 '연도' 추출, 예: YEAR('2024-04-15') => 2024
+-- MONTH(날짜): 입력 날짜의 '월' 추출, 예: MONTH('2024-04-15') => 4
+-- DAY(날짜): 입력 날짜의 '일' 추출, 예: DAY('2024-04-15') => 15
+-- EXTRACT(필드 FROM 날짜): 입력 날짜에서 특정 '필드' 추출, 예: EXTRACT(YEAR FROM '2024-04-15') => 2024
+-- 필드: YEAR, MONTH, DAY, HOUR, MINUTE, SECOND 등
 
 
+-- 3. 시간 필터링하기
+-- 예: 오전에 주문받은 매출 합계를 구하려면?
+
+-- 1) 시간 함수
+-- 입력받은 시간에서 시, 분, 초 등을 추출
+-- HOUR(시간): 입력 시간의 '시' 추출, 예: HOUR('2024-10-04 08:30:45') => 8
+-- MINUTE(시간): 입력 시간의 '분' 추출, 예: MINUTE('2024-10-04 08:30:45') => 30
+-- SECOND(시간): 입력 시간의 '초' 추출, 예: SECOND('2024-10-04 08:30:45') => 45
+-- TIME_TO_SEC(시간): 입력 시간의 시, 분, 초를 '초'로 환산, 예: TIME_TO_SEC('08:30:45') => 30645
 
 
 
