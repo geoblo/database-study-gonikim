@@ -264,5 +264,52 @@ FROM user_profiles;
 -- 222   | Art Exhibition  | 2024-11-15  | 12:00:00   | 2024-09-05 11:30:00  | 2024
 
 -- Quiz: 이벤트(events) 테이블 생성
+CREATE TABLE events (
+	id , 				-- 아이디(표준 정수)
+	event_name , 	-- 이벤트명(가변 길이 문자: 최대 100자)
+	event_date , 			-- 이벤트 일자(YYYY-MM-DD)
+	start_time , 			-- 이벤트 시간(hh:mm:ss)
+	created_at , 		-- 이벤트 등록 일시(YYYY-MM-DD hh:mm:ss)
+	event_year , 			-- 이벤트 연도(YYYY)
+	PRIMARY KEY (id) 			-- 기본키 지정: id
+);
+
+-- 이벤트(events) 데이터 삽입
+INSERT INTO 
+	events (id, event_name, event_date, start_time, created_at, event_year)
+VALUES
+	(111, 'Music Festival', '2024-10-04', '17:55:00', '2024-09-04 10:25:30', '2024'),
+	(222, 'Art Exhibition', '2024-11-15', '12:00:00', '2024-09-05 11:30:00', '2024');
+    
+-- 데이터 조회
+SELECT *
+FROM events;
+
+-- Quiz
+-- 1. 다음은 orders(주문)테이블을 생성하는 쿼리이다. 바르게 설명한 것을 모두 고르세요.
+
+CREATE TABLE orders (
+	id INTEGER,              -- 아이디
+	name VARCHAR (255), 	 -- 상품명
+	price DECIMAL(10, 2),    -- 가격
+	quantity INTEGER,        -- 주문 수량
+	customer_name CHAR(100), -- 고객명
+	shipping_address TEXT,   -- 배송 주소
+	created_at DATETIME,     -- 주문 일시
+	PRIMARY KEY (id)
+);
+
+-- ① id는 기본키로 선언됐다.
+-- ② name은 최대 255자까지 저장할 수 있다.
+-- ③ price에 저장할 수 있는 최댓값은 9,999,999,999이다.
+-- ④ customer_name이 100자보다 짧으면, 고객명을 저장하고 남은 만큼의 메모리 공간이 절약된다.
+-- ⑤ created_at에는 날짜와 시간 값을 모두 저장할 수 있다.
+
+-- 정답:
+
+
+
+
+
 
 
