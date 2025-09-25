@@ -85,6 +85,52 @@ VALUES
 -- 잘 들어갔는지 일단 확인
 SELECT * FROM employees;
 
+-- 모든 직원 수 세기
+SELECT COUNT(*)
+FROM employees;
+
+-- 부서가 있는 직원 수 세기
+SELECT COUNT(department)
+FROM employees;
+
+-- 모든 종류의 버거를 다 사면 얼마?
+-- 합계 구하기
+SELECT SUM(price)
+FROM burgers;
+
+-- 버거의 평균 가격은?
+-- 평균 구하기
+SELECT AVG(price)
+FROM burgers;
+-- (참고) 계산 과정에서 NULL은 자동으로 제외함(NULL을 0으로 취급하지 않음)
+
+-- Quiz
+-- 1. burgers 테이블에 다음 쿼리를 실행했을 때, 
+-- 결과 테이블 1~3에 들어갈 값을 쉼표로 구분하여 적으시오. (예: 123, 45, 67890)
+
+-- burgers
+-- id | name              | price  | gram  | kcal  | protein
+-- ---------------------------------------------------------
+-- 1    빅맨                 5300     223     583      27
+-- 2    베이컨 틈메이러 디럭스   6200     242     545      27
+-- 3    맨스파이시 상해 버거     5300     235     494      20
+-- 4    슈비두밥 버거          6200     269     563      21
+-- 5    더블 쿼터파운드 치즈     7700     275     770      50
+
+-- SELECT MAX(kcal), MIN(protein), SUM(price)
+-- FROM burgers
+-- WHERE price < 6000;
+
+-- 결과 테이블
+-- ---------------------------------------
+-- MAX(kcal)  | MIN(protein)  | SUM(price)
+-- ---------------------------------------
+-- ①          | ②             | ③
+
+-- 정답:
+
+
+
 
 
 
