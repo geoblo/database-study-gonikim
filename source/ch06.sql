@@ -298,6 +298,30 @@ SELECT * FROM players;
 -- 중간 테이블을 경유하여 A와 B가 연결됨
 -- 다대다 관계에서는 중간 테이블을 만들어 외래키 지정
 
+-- doctors 테이블
+CREATE TABLE doctors (
+	id INT,
+    name VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+-- patients 테이블
+CREATE TABLE patients (
+	id INT,
+    name VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+-- appointments 테이블
+CREATE TABLE appointments (
+	id INT,
+    doctor_id INT, -- 의사 아이디
+    patient_id INT, -- 환자 아이디
+    date DATE, -- 진료 일자
+    PRIMARY KEY (id), 
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id),
+    FOREIGN KEY (patient_id) REFERENCES patients(id)
+);
 
 DESC appointments;
 
@@ -330,7 +354,106 @@ SELECT * FROM doctors;
 SELECT * FROM patients;
 SELECT * FROM appointments;
 
+-- Quiz: 관계 맺기
+-- 1. 사람과 여권(한 사람은 한 개의 여권을 가지고, 한 여권은 한 사람에게만 발급)
+-- 사람 테이블
+CREATE TABLE persons (
+  id INTEGER,        -- ID
+  name VARCHAR(50),  -- 이름
+    -- 기본키 지정: id
+);
 
+-- 여권 테이블
+CREATE TABLE passports (
+  id INTEGER,                  -- ID
+  passport_number VARCHAR(20), -- 여권 번호
+  person_id INTEGER,    -- 사람_ID
+            -- 기본키 지정: id
+  -- 외래키 지정: person_id
+);
+
+-- 2. 회사와 직원(한 회사는 여러 직원을 고용할 수 있지만, 한 직원은 하나의 회사에만 소속)
+-- 회사 테이블
+CREATE TABLE companies (
+  id INTEGER,       -- ID
+  name VARCHAR(50), -- 회사명
+    -- 기본키 지정: id
+);
+
+-- 직원 테이블
+CREATE TABLE employees (
+  id INTEGER,             -- ID
+  name VARCHAR(50),       -- 직원명
+  company_id INTEGER,     -- 회사_ID
+        -- 기본키 지정:
+    -- 외래키 지정: company_id
+);
+
+-- 3. 학생과 과목(한 학생은 여러 과목을 수강하고, 한 과목은 여러 학생이 수강할 수 있음)
+-- 학생 테이블
+CREATE TABLE students (
+  id INTEGER,          -- ID
+  name VARCHAR(50),    -- 학생명
+      -- 기본키 지정: id
+);
+
+-- 과목 테이블
+CREATE TABLE subjects (
+  id INTEGER,        -- ID
+  title VARCHAR(50), -- 과목명
+      -- 기본키 지정: id
+);
+
+-- 수강 테이블(중간 테이블)
+CREATE TABLE enrollments (
+  id INTEGER,          -- ID
+  student_id INTEGER,  -- 학생_ID
+  subject_id INTEGER,  -- 과목_ID
+      -- 기본키 지정: id
+    -- 외래키 지정: student_id 
+    -- 외래키 지정: subject_id 
+);
+
+-- Quiz
+-- 2. 다음 세 테이블에 대한 설명으로 맞으면 O, 틀리면 X를 표시하시오.
+
+-- doctors
+-- id | name
+-- ------------
+-- 1  | 김 닥터
+-- 2  | 이 닥터
+-- 3  | 최 닥터
+
+-- patients
+-- id | name
+-- ------------
+-- 1  | 환자 A
+-- 2  | 환자 B
+-- 3  | 환자 C
+
+-- appointments
+-- id | doctor_id  | patient_id  | date
+-- -------------------------------------------
+-- 1  | 1          | 1           | 2025-01-01
+-- 2  | 1          | 2           | 2025-01-02
+-- 3  | 2          | 2           | 2025-01-03
+-- 4  | 2          | 3           | 2025-01-04
+-- 5  | 3          | 3           | 2025-01-05
+-- 6  | 3          | 1           | 2025-01-06
+
+-- ① '김 닥터'는 '환자 A'를 진료했다. (  )
+-- ② '이 닥터'는 3회의 진료 기록이 있다. (  )
+-- ③ '환자 C'는 '최 닥터'에게 진료를 받았다. (  )
+
+-- 정답: 
+
+-- 3. 다음 설명이 맞으면 O, 틀리면 X를 표시하시오.
+-- ① 두 테이블 간 일대일 관계는 어느 쪽에 외래키를 지정해도 무방하나 대게 테이블의 사용 빈도가 적은 쪽에 지정한다. 
+-- 또한 외래키 컬럼을 선언할 때 UNIQUE 제약 조건을 설정한다. (  )
+-- ② 두 테이블 간 일대다 관계는 '일' 쪽 테이블에 외래키를 지정한다. (  )
+-- ③ 두 테이블 간 다대다 관계는 중간 테이블을 만들어 두 테이블의 기본키를 참조하도록 외래키를 지정한다. (  )
+
+-- 정답:
 
 
 
