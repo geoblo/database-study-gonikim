@@ -360,16 +360,16 @@ SELECT * FROM appointments;
 CREATE TABLE persons (
   id INTEGER,        -- ID
   name VARCHAR(50),  -- 이름
-    -- 기본키 지정: id
+  PRIMARY KEY (id)  -- 기본키 지정: id
 );
 
 -- 여권 테이블
 CREATE TABLE passports (
   id INTEGER,                  -- ID
   passport_number VARCHAR(20), -- 여권 번호
-  person_id INTEGER,    -- 사람_ID
-            -- 기본키 지정: id
-  -- 외래키 지정: person_id
+  person_id INTEGER UNIQUE,    -- 사람_ID
+  PRIMARY KEY (id),          -- 기본키 지정: id
+  FOREIGN KEY (person_id) REFERENCES persons(id) -- 외래키 지정: person_id
 );
 
 -- 2. 회사와 직원(한 회사는 여러 직원을 고용할 수 있지만, 한 직원은 하나의 회사에만 소속)
@@ -377,7 +377,7 @@ CREATE TABLE passports (
 CREATE TABLE companies (
   id INTEGER,       -- ID
   name VARCHAR(50), -- 회사명
-    -- 기본키 지정: id
+  PRIMARY KEY (id)  -- 기본키 지정: id
 );
 
 -- 직원 테이블
@@ -385,8 +385,8 @@ CREATE TABLE employees (
   id INTEGER,             -- ID
   name VARCHAR(50),       -- 직원명
   company_id INTEGER,     -- 회사_ID
-        -- 기본키 지정:
-    -- 외래키 지정: company_id
+  PRIMARY KEY (id),      -- 기본키 지정: id
+  FOREIGN KEY (company_id) REFERENCES companies(id) -- 외래키 지정: company_id
 );
 
 -- 3. 학생과 과목(한 학생은 여러 과목을 수강하고, 한 과목은 여러 학생이 수강할 수 있음)
@@ -394,14 +394,14 @@ CREATE TABLE employees (
 CREATE TABLE students (
   id INTEGER,          -- ID
   name VARCHAR(50),    -- 학생명
-      -- 기본키 지정: id
+  PRIMARY KEY (id)    -- 기본키 지정: id
 );
 
 -- 과목 테이블
 CREATE TABLE subjects (
   id INTEGER,        -- ID
   title VARCHAR(50), -- 과목명
-      -- 기본키 지정: id
+  PRIMARY KEY (id)    -- 기본키 지정: id
 );
 
 -- 수강 테이블(중간 테이블)
@@ -409,9 +409,9 @@ CREATE TABLE enrollments (
   id INTEGER,          -- ID
   student_id INTEGER,  -- 학생_ID
   subject_id INTEGER,  -- 과목_ID
-      -- 기본키 지정: id
-    -- 외래키 지정: student_id 
-    -- 외래키 지정: subject_id 
+  PRIMARY KEY (id),    -- 기본키 지정: id
+  FOREIGN KEY (student_id) REFERENCES students(id), -- 외래키 지정: student_id 
+  FOREIGN KEY (subject_id) REFERENCES subjects(id)  -- 외래키 지정: subject_id 
 );
 
 -- Quiz
@@ -445,7 +445,7 @@ CREATE TABLE enrollments (
 -- ② '이 닥터'는 3회의 진료 기록이 있다. (  )
 -- ③ '환자 C'는 '최 닥터'에게 진료를 받았다. (  )
 
--- 정답: 
+-- 정답: O, X, O
 
 -- 3. 다음 설명이 맞으면 O, 틀리면 X를 표시하시오.
 -- ① 두 테이블 간 일대일 관계는 어느 쪽에 외래키를 지정해도 무방하나 대게 테이블의 사용 빈도가 적은 쪽에 지정한다. 
@@ -453,7 +453,42 @@ CREATE TABLE enrollments (
 -- ② 두 테이블 간 일대다 관계는 '일' 쪽 테이블에 외래키를 지정한다. (  )
 -- ③ 두 테이블 간 다대다 관계는 중간 테이블을 만들어 두 테이블의 기본키를 참조하도록 외래키를 지정한다. (  )
 
--- 정답:
+-- 정답: O, X, O
+
+
+/*
+	6.3 관계 만들기 실습: 별그램 DB
+*/
+-- 사진 공유 SNS, 별그램 DB를 만들며 다양한 관계 생성 훈련!
+
+-- 별그램 DB의 테이블 개요
+-- • users(사용자): 사용자의 '아이디', '닉네임, '이메일'을 저장합니다.
+-- • photos(사진): 사진의 '아이디', '파일명', '게시자 아이디'를 저장합니다.
+-- • comments(댓글): 댓글의 '아이디', '본문', 작성자 아이디', '댓글이 달린 사진 아이디'를 저장합니다.
+-- • settings(개인 설정): 사용자 개인 설정의 '아이디, '계정 공개 여부', '계정 추천 여부', '사용자 아이디'를 저장합니다.
+-- • likes(좋아요): 좋아요의 '아이디', '좋아요를 누른 사용자 아이디', '좋아요를 받은 사진 아이디'를 저장합니다.
+
+-- 5개의 테이블은 다음과 같은 관계를 가짐
+-- • 일대일 관계: '사용자'는 개인별로 하나의 '개인 설정' 값만 가질 수 있습니다.
+-- • 일대다 관계: '사용자'는 여러 장의 '사진'을 게시할 수 있습니다.
+-- • 다대다 관계:
+-- - '사용자'는 여러 '사진'에 댓글을 작성할 수 있고, '사진' 또한 여러 '사용자'로부터 댓글을 받을 수 있습니다.
+-- - '사용자'는 여러 '사진'에 좋아요를 누를 수 있고, '사진' 또한 여러 '사용자'로부터 좋아요를 받을 수 있습니다.
+
+-- stargram DB 생성 및 진입
+CREATE DATABASE stargram;
+USE stargram;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
