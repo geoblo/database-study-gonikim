@@ -14,7 +14,7 @@ WHERE category = '전자기기';
 -- ③ 전자기기 카테고리에서 가장 낮은 가격
 -- ④ 모든 제품의 가장 낮은 가격
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 2
@@ -26,7 +26,7 @@ WHERE category = '전자기기';
 -- ④ 모든 카테고리 값이 다르다면, COUNT(DISTINCT category)로 조회하던 COUNT(category) 조회하던 결과는 같다.
 --   (NULL 값은 없다고 가정한다)
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 3
@@ -41,7 +41,7 @@ WHERE NOT (price > 10000);
 -- ③ 가격이 10,000원 이하인 제품의 재고
 -- ④ 가격이 10,000원 이하인 제품의 재고 총합
 
--- 정답: 
+-- 정답: 4
 
 
 -- 문제 4
@@ -56,7 +56,7 @@ WHERE category IN ('전자기기', '생활용품');
 -- ③ 전자기기 또는 생활용품 카테고리의 최대 가격
 -- ④ 전자기기 또는 생활용품 카테고리의 가격 합계
 
--- 정답: 
+-- 정답: 1
 
 
 -- 문제 5
@@ -71,7 +71,7 @@ WHERE price >= 20000 AND price <= 100000;
 -- ③ 가격이 20,000원 이상인 제품의 최소 재고
 -- ④ 가격이 100,000원 이하인 제품의 최소 재고
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 6
@@ -86,7 +86,7 @@ WHERE rating IN (4.0, 4.5);
 -- ③ 평점(rating)이 4.0부터 4.5인 제품의 개수
 -- ④ 평점(rating)이 4.0과 4.5가 아닌 제품의 개수
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 7
@@ -101,7 +101,7 @@ WHERE stock >= 10 AND category IN ('식품', '전자기기');
 -- ③ 재고가 10 이상인 식품과 전자기기의 최대 가격
 -- ④ 재고가 10 미만인 식품과 전자기기의 최대 가격
 
--- 정답: 
+-- 정답: 3
 
 
 -- 2. 집계 함수 연습 문제
@@ -140,47 +140,61 @@ VALUES
 -- 모든 주문의 총 매출액을 계산하세요.
 
 -- 정답:
-
+SELECT SUM(quantity * price) AS total_price
+FROM orders;
 
 
 -- 문제 2
 -- 단가가 1,000,000원 이상인 제품의 주문 건수를 계산하세요.
 
 -- 정답:
-
+SELECT COUNT(*) AS expensive_orders
+FROM orders
+WHERE price >= 1000000;
 
 
 -- 문제 3
 -- 주문 수량이 2개 이상이면서 단가가 1,000,000원 이하인 제품의 총 매출액을 계산하세요.
 
 -- 정답:
-
+SELECT SUM(quantity * price) AS total_price
+FROM orders
+WHERE quantity >= 2 AND price <= 1000000;
 
 
 -- 문제 4
 -- 고객이 사는 지역(region)의 개수를 출력하세요.
 
 -- 정답:
-
+SELECT COUNT(DISTINCT region) AS unique_regions
+FROM orders;
 
 
 -- 문제 5
 -- 주문 날짜가 2023-11-01과 2023-11-05 사이에 해당하는 주문의 총 수량을 계산하세요.
 
 -- 정답:
-
+SELECT SUM(quantity) AS total_quantity
+FROM orders
+WHERE order_date >= '2023-11-01' AND order_date <= '2023-11-05';
+-- DATE 타입이라 날짜로 변환되어 날짜 비교를 함
+-- 문자열 비교여도 문제는 없음
 
 
 -- 문제 6
 -- 고객 이름이 '김철수'이거나 '대구'에 사는 고객이 주문한 제품명을 중복 없이 조회하세요.
 
 -- 정답:
-
+SELECT DISTINCT product AS unique_products
+FROM orders
+WHERE customer_name = '김철수' OR region = '대구';
 
 
 -- 문제 7
 -- '스마트폰'이 총 몇 대 팔렸는지 조회하세요.
 
 -- 정답:
-
+SELECT SUM(quantity)
+FROM orders
+WHERE product = '스마트폰';
 

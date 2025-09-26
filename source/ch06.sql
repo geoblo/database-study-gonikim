@@ -52,16 +52,21 @@
 -- - 불변성: 한 번 정해진 값은 바뀔 수 없음
 -- - 식별성: 레코드를 구분하는 명확한 기준 역할을 해야 함
 
+-- 실무에서는 보통 기본키는 id로 명명
+-- 예: 고객 테이블은 customer_id, 상품 테이블은 product_id와 같이 테이블명_id 형식으로 이름을 짓는 것이 일반적인 관례
+-- 1부터 시작하여 데이터가 추가될 때마다 1씩 자동으로 증가하는 정수값(INTEGER)을 기본키로 사용하는 경우가 가장 흔함
+
 
 -- 외래키(FK, Foreign Key)
 -- 다른 테이블의 기본키를 가리키는 컬럼
 -- 두 테이블을 관계로 묶어 연결하는 역할
-
+-- 예: 고객 테이블(PK: customer_id, 참조 당하는 쪽, 부모 테이블) <--(참조)-- 주문 테이블(FK: customer_id, 참조 하는 쪽, 자식 테이블)
 
 -- "참조 무결성"을 강제함(두 테이블의 관계가 항상 유효하고 일관된 상태를 유지해야 한다는 원칙)
 -- 쉽게 말하면 참조하는 값이 무조건 있어야 함
--- 예: 고객 테이블에 customer_id(PK)가 1~3까지 저장되어 있는데 주문 테이블에 customer_id(FK) 값이 99가 입력된다면(고객 테이블에는 99번 고객 아이디가 없음) 데이터베이스는 데이터의 입력을 막음(오류 발생)
-
+-- 예: 고객 테이블에 customer_id(PK)가 1~3까지 저장되어 있는데 
+-- 주문 테이블에 customer_id(FK) 값이 99가 입력된다면(고객 테이블에는 99번 고객 아이디가 없음) 
+-- 데이터베이스는 데이터의 입력을 막음(오류 발생)
 
 
 -- 그 외 제약 조건
@@ -77,6 +82,43 @@
 -- - UNSIGNED: 숫자형 컬럼에 음수 허용을 금지(양수값만 저장하도록 제한)
 
 -- 제약 조건의 사용 예
+CREATE TABLE users (
+	id INT AUTO_INCREMENT,               -- 아이디(자동으로 1씩 증가)
+    email VARCHAR(100) UNIQUE,           -- 이메일(고유한 값만 허용)
+    name VARCHAR(50) NOT NULL,           -- 사용자명(NULL을 허용하지 않음)
+    status VARCHAR(10) DEFAULT 'active', -- 계좌 상태(기본값은 'active')
+    balance INT UNSIGNED,                -- 계좌 잔액(음수를 허용하지 않음)
+    age INT CHECK (age >= 18),           -- 나이(18세 이상만 허용)
+    PRIMARY KEY (id)                     -- 기본키 지정: id
+);
+
+-- 제약 조건 위반 시 테스트
+-- 사용자명(NOT NULL)에 NULL 값을 입력 시도
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', NULL);
+-- Error Code: 1048. Column 'name' cannot be null
+
+-- 이메일(UNIQUE)에 중복 값을 입력 시도
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', '김');
+
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', '재');
+-- Error Code: 1062. Duplicate entry 'geoblo@naver.com' for key 'users.email'
+
+-- 기본키(PK)에 중복 값을 입력 시도
+INSERT INTO users (id, email, name)
+VALUES (1, 'hyun@naver.com', '현');
+-- Error Code: 1062. Duplicate entry '1' for key 'users.PRIMARY'
+
+-- 나이(age >= 18)에 18세 미만 값을 입력 시도
+INSERT INTO users (email, name, age)
+VALUES ('hyun@naver.com', '현', 15);
+-- Error Code: 3819. Check constraint 'users_chk_1' is violated.
+
+
+
+
 
 
 
