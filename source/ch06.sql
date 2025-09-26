@@ -291,18 +291,44 @@ VALUES
 SELECT * FROM teams;
 SELECT * FROM players;
 
+-- 3. 다대다 관계 만들기
+-- A와 B 테이블 서로가 다수의 데이터와 연결되는 관계
+-- - A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결
+-- - B 테이블의 한 데이터 또한 A 테이블의 여러 데이터와 연결
+-- 중간 테이블을 경유하여 A와 B가 연결됨
+-- 다대다 관계에서는 중간 테이블을 만들어 외래키 지정
 
 
+DESC appointments;
 
+-- doctors 데이터 삽입
+INSERT INTO doctors (id, name)
+VALUES
+	(1, '김 닥터'),
+	(2, '이 닥터'),
+	(3, '최 닥터');
 
+-- patients 데이터 삽입
+INSERT INTO patients (id, name)
+VALUES
+	(1, '환자 A'),
+	(2, '환자 B'),
+	(3, '환자 C');
 
+-- appointments 데이터 삽입
+INSERT INTO appointments (id, doctor_id, patient_id, date)
+VALUES
+	(1, 1, 1, '2025-01-01'),
+	(2, 1, 2, '2025-01-02'),
+	(3, 2, 2, '2025-01-03'),
+	(4, 2, 3, '2025-01-04'),
+	(5, 3, 3, '2025-01-05'),
+	(6, 3, 1, '2025-01-06');
 
-
-
-
-
-
-
+-- 확인
+SELECT * FROM doctors;
+SELECT * FROM patients;
+SELECT * FROM appointments;
 
 
 
