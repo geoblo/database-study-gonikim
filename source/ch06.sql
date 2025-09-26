@@ -479,6 +479,138 @@ CREATE TABLE enrollments (
 CREATE DATABASE stargram;
 USE stargram;
 
+-- 1. 사용자 테이블 만들기
+CREATE TABLE users (
+	id INT AUTO_INCREMENT,
+    nickname VARCHAR(30),
+    email VARCHAR(255) UNIQUE,
+    PRIMARY KEY (id)
+);
+
+-- 2. 사진 테이블 만들기
+CREATE TABLE photos (
+	id INT AUTO_INCREMENT,
+    filename VARCHAR(255) NOT NULL,
+    user_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 3. 댓글 테이블 만들기
+CREATE TABLE comments (
+	id INT AUTO_INCREMENT,
+    body VARCHAR(1000),
+    user_id INT,
+    photo_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (photo_id) REFERENCES photos(id)
+);
+
+-- 4. 개인 설정 테이블 만들기
+CREATE TABLE settings (
+	id INT AUTO_INCREMENT,
+    private BOOLEAN NOT NULL,
+    account_suggestions BOOLEAN NOT NULL,
+    user_id INT UNIQUE, -- 1:1 연결을 위해 UNIQUE 지정
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 5. 좋아요 테이블 만들기
+CREATE TABLE likes (
+	id INT AUTO_INCREMENT,
+    user_id INT,
+    photo_id INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (photo_id) REFERENCES photos(id)
+);
+
+-- users 데이터 삽입(id는 자동 증가값으로 입력되므로 생략)
+INSERT INTO users (nickname, email)
+VALUES
+	('홍팍', 'sehongpark@cloudstudying.kr'),
+	('길벗', 'gilbut@cloudstudying.kr'),
+	('해삼', 'haesamq@cloudstudying.kr');
+
+-- 데이터 조회
+SELECT *
+FROM users;
+
+-- photos 데이터 삽입
+INSERT INTO photos (filename, user_id)
+VALUES
+	-- 1번 사용자가 게시한 사진
+	('길고양이.jpg', 1),
+	('일몰.jpg', 1),
+	('은하계.jpg', 1),
+	-- 2번 사용자가 게시한 사진
+	('백호.jpg', 2),
+	('검은 고양이 네로.jpg', 2),
+	-- 사용자가 등록되지 않은 사진
+	('삭제된 이미지.jpg', NULL),
+	('제한된 이미지.jpg', NULL);
+
+-- 데이터 조회
+SELECT *
+FROM photos;
+
+-- comments 데이터 삽입
+INSERT INTO comments (body, user_id, photo_id)
+VALUES
+	-- 1번 사진에 달린 댓글
+	('미야옹~', 1, 1),
+	('냐옹!', 2, 1),
+	('냥냥~', 3, 1),
+	-- 2번 사진에 달린 댓글
+	('일몰이 멋지네요', 1, 2),
+	('해가 바다로 스윽~', 2, 2),
+	-- 3번 사진에 달린 댓글
+	('안드로메다 성운인가?', 1, 3),
+	('성운이 아니라 은하임', 3, 3),
+	-- 대상 사진이 없는 댓글
+	('와우~', 3, NULL),
+	('오우야~', 3, NULL);
+
+-- 데이터 조회
+SELECT *
+FROM comments;
+
+-- settings 데이터 삽입
+INSERT INTO settings (private, account_suggestions, user_id)
+VALUES
+	(FALSE, FALSE, 1), 	-- 1번 사용자(비공개 계정, 계정 추천 불가)
+	(FALSE, TRUE, 2), 	-- 2번 사용자(비공개 계정, 계정 추천 허용)
+	(TRUE, TRUE, 3); 	-- 3번 사용자(공개 계정, 계정 추천 허용)
+
+-- 데이터 조회
+SELECT *
+FROM settings;
+
+-- likes 데이터 삽입
+INSERT INTO likes (user_id, photo_id)
+VALUES
+	-- 1번 사진에 달린 좋아요: 1, 2번 사용자가 누름
+	(1, 1),
+	(2, 1),
+	-- 2번 사진에 달린 좋아요: 1, 2, 3번 사용자가 누름
+	(1, 2),
+	(2, 2),
+	(3, 2),
+	-- 3번 사진에 달린 좋아요: 1, 3번 사용자가 누름
+	(1, 3),
+	(3, 3),
+	-- 6번 사진에 달린 좋아요, 사용자 미등록(탈퇴?, 영정?)
+	(NULL, 6),
+	-- 7번 사진에 달린 좋아요: 사용자 미등록
+	(NULL, 7);
+
+-- 데이터 조회
+SELECT *
+FROM likes;
+
+
 
 
 
