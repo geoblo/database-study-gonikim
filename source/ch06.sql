@@ -116,28 +116,28 @@ INSERT INTO users (email, name, age)
 VALUES ('hyun@naver.com', '현', 15);
 -- Error Code: 3819. Check constraint 'users_chk_1' is violated.
 
-
-
-
-
-
-
-
-
-
-
 -- Quiz: 제약 조건 걸기
 CREATE TABLE products (
-  id INTEGER,           -- 상품 ID(자동 증가)
-  name VARCHAR(100),    -- 상품명(고유한 값만 허용)
-  category VARCHAR(50), -- 상품 카테고리(NULL 불가)
-  status VARCHAR(20),   -- 상품 상태(기본값: available)
-  dc_rate INTEGER,      -- 할인율(0~50% 제한)
-  stock INTEGER,        -- 재고 수량(음수 불가)
-                        -- 기본키 설정: id
+  id INTEGER AUTO_INCREMENT,                 -- 상품 ID(자동 증가)
+  name VARCHAR(100) UNIQUE,                  -- 상품명(고유한 값만 허용)
+  category VARCHAR(50) NOT NULL,             -- 상품 카테고리(NULL 불가)
+  status VARCHAR(20) DEFAULT 'available',    -- 상품 상태(기본값: available)
+  dc_rate INTEGER (dc_rate BETWEEN 0 AND 50),-- 할인율(0~50% 제한)
+  -- dc_rate INTEGER (dc_rate >= 0 AND dc_rate <= 50)
+  stock INTEGER UNSIGNED,                    -- 재고 수량(음수 불가)
+  PRIMARY KEY (id)                           -- 기본키 설정: id
 );
 
-
+-- (참고) Tip! 날짜와 기본값 설정 옵션
+CREATE TABLE boards (
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP, 
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- 이 기능을 사용하면 행이 추가되거나 변경될 때 날짜를 편리하게 관리할 수 있음
+-- DEFAULT CURRENT_TIMESTAMP: 새로운 데이터 행이 추가될 때, 
+-- 해당 컬럼에 별도의 값을 지정하지 않으면 현재 날짜와 시간이 자동으로 입력됨
+-- DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP: 새로운 데이터 행이 추가될 때는 물론이고,
+-- 같은 행의 컬럼 값이 변경되어 업데이트될 때, 현재 날짜와 시간으로 자동 갱신됨
 
 
 -- Quiz
@@ -154,7 +154,7 @@ CREATE TABLE products (
 -- (ㄹ) NULL
 -- (ㅁ) 기본키(PK)
 
--- 정답: 
+-- 정답: ㄴㅁㄱㄹㄷ 
 
 
 /*
@@ -163,8 +163,10 @@ CREATE TABLE products (
 -- 외래키와 기본키를 연결하여 일대일/일대다/다대다 관계를 만들어 보자
 
 -- 외래키 제약 조건의 문법
-
-
+-- CONSTRAINT [제약조건_이름] 
+-- FOREIGN KEY ([자식_테이블의_컬럼명]) 
+-- REFERENCES [부모_테이블명]([부모_테이블의_컬럼명])
+-- [ON DELETE 옵션] [ON UPDATE 옵션]
 
 
 -- 1. 일대일 관계 만들기
@@ -176,11 +178,59 @@ CREATE TABLE products (
 CREATE DATABASE relation;
 USE relation;
 
+-- countries 테이블 생성
+CREATE TABLE countries (
+	id INT,
+    name VARCHAR(255), -- 국가명
+    PRIMARY KEY (id)
+);
 
+-- capitals 테이블 생성
+CREATE TABLE capitals (
+	id INT,
+    name VARCHAR(255), -- 수도명
+    country_id INT UNIQUE, -- 국가 아이디(수도가 속한 나라)
+    -- 타입은 국가 테이블과 동일하게 맞춤
+    -- 고유한 값만 허용(한 나라에 수도가 2개 이상일 수 없음) => UNIQUE: 일대일 관계를 만들기 위한 중요한 제약 조건
+    PRIMARY KEY (id),
+    FOREIGN KEY (country_id) REFERENCES countries(id)
+    -- country_id 외래키는 countries 테이블의 id 컬럼을 가르킨다는 의미(참조)
+);
 
+-- (참고) 실무에서는 보통 명시적으로 CONSTRAINT 이름을 주는 것을 권장(유지보수, 디버깅 편리)
+-- CONSTRAINT fk_capitals_countries FOREIGN KEY (country_id) REFERENCES countries(id)
+
+DESC countries;
+DESC capitals;
+
+-- countries 데이터 삽입
+INSERT INTO countries (id, name)
+VALUES
+	(1, 'South Korea'),
+	(2, 'United States'),
+	(3, 'Japan');
+
+-- capitals 데이터 삽입
+INSERT INTO capitals (id, name, country_id)
+VALUES
+	(101, 'Seoul', 1),
+	(102, 'Washington D.C.', 2),
+	(103, 'Tokyo', 3);
+
+-- 확인
+SELECT * FROM countries;
+SELECT * FROM capitals;
 
 -- 2. 일대다 관계 만들기
 -- A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결되는 관계
 -- 하나의 데이터에 여러 데이터가 포함되거나 소유되는 경우
 -- 일대다 관계에서는 '다' 쪽 테이블에 외래키 지정
+
+
+
+
+
+
+
+
 
