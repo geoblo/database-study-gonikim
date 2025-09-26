@@ -247,11 +247,59 @@ WHERE id = 1; -- 이 나라를 참조하는 수도(자식 테이블)가 있기 �
 -- 이 경우에는 자식 테이블에 참조하는 데이터를 모두 삭제하고 부모 테이블에서 삭제하면 가능
 
 
-
 -- 2. 일대다 관계 만들기
 -- A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결되는 관계
 -- 하나의 데이터에 여러 데이터가 포함되거나 소유되는 경우
 -- 일대다 관계에서는 '다' 쪽 테이블에 외래키 지정
+
+-- teams 테이블
+CREATE TABLE teams (
+	id INT,
+    name VARCHAR(255), -- 팀명
+    PRIMARY KEY (id)
+);
+
+-- players 테이블
+CREATE TABLE players (
+	id INT,
+    name VARCHAR(255), -- 선수명
+    team_id INT, -- 소속팀 아이디, 일대다 관계에서는 UNIQUE 제약 조건 X
+    PRIMARY KEY (id),
+    FOREIGN KEY (team_id) REFERENCES teams(id)
+    -- teams 테이블의 id 컬럼을 가르킴 => 선수가 어느 팀에 소속되어 있는지를 연결(관계 형성)
+);
+
+DESC teams;
+DESC players;
+
+-- teams 데이터 등록
+INSERT INTO teams (id, name)
+VALUES
+	(1, 'FC Awesome'),
+	(2, 'Winners United');
+
+-- players 데이터 등록
+INSERT INTO players (id, name, team_id)
+VALUES
+	(1, 'John Doe', 1),
+	(2, 'Jane Smith', 1),
+	(3, 'Max Payne', 2),
+	(4, 'Alex Johnson', 2),
+	(5, 'Sara Connor', 2);
+
+-- 확인
+SELECT * FROM teams;
+SELECT * FROM players;
+
+
+
+
+
+
+
+
+
+
 
 
 
