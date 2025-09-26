@@ -221,6 +221,18 @@ VALUES
 SELECT * FROM countries;
 SELECT * FROM capitals;
 
+-- 참조 무결성 위반 시 테스트
+INSERT INTO capitals (id, name, country_id)
+VALUES (104, 'Paris', 999); -- 999는 부모 테이블에 없는 id
+-- Error Code: 1452. Cannot add or update a child row: a foreign key constraint fails (`relation`.`capitals`, CONSTRAINT `capitals_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`))
+
+DELETE FROM countries
+WHERE id = 1; -- 이 나라를 참조하는 수도(자식 테이블)가 있기 때문에 삭제 불가
+-- Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails (`relation`.`capitals`, CONSTRAINT `capitals_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`))
+-- 이 경우에는 자식 테이블에 참조하는 데이터를 모두 삭제하고 부모 테이블에서 삭제하면 가능
+
+
+
 -- 2. 일대다 관계 만들기
 -- A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결되는 관계
 -- 하나의 데이터에 여러 데이터가 포함되거나 소유되는 경우
