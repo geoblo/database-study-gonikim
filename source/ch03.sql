@@ -49,3 +49,69 @@ VALUES
 	(3, '맨스파이시 상하이 버거', '매콤한 닭가슴살 패티와 양상추, 토마토가 어우러진 치킨버거입니다.', 5300, 235, 494, 20),
 	(4, '슈비두밥 버거', NULL, 6200, 269, 563, 21),
 	(5, '더블 쿼터파운드 치즈', '쇠고기 패티 두 장과 치즈 두 장이 어우러진 버거입니다.', 7700, 275, 770, 50);
+
+-- 모든 버거 조회
+SELECT * FROM burgers;
+
+-- 1) 비교 연산자
+-- 두 값을 비교하는 연산 기호
+-- WHERE 절에 사용하여 특정 데이터로 필터링 가능
+-- 종류: =, !=, >, >=, <, <=
+
+-- Quiz: 가격이 5500원 보다 싼 버거 찾기
+SELECT *
+FROM burgers
+WHERE price < 5500;
+
+-- Quiz: 가격이 5500원 보다 비싼 버거 찾기
+SELECT *
+FROM burgers
+WHERE price > 5500;
+
+-- Quiz: 단백질량이 25g 보다 적은 버거 찾기
+SELECT *
+FROM burgers
+WHERE protein < 25;
+
+-- (참고) NULL 비교에 대해
+-- NULL은 데이터베이스에서 '값이 없음'을 나타내는 특별한 상태
+-- NULL은 특정 값이 아니기 때문에 등호(=)로 비교할 수 없음
+SELECT *
+FROM burgers
+WHERE description = NULL;
+
+-- 이런 문제를 해결하기 위해 SQL은 'IS NULL' 이라는 특별한 키워드를 제공함
+-- IS NULL: 해당 열의 값이 NULL인 행을 찾음
+-- IS NOT NULL: 해당 열의 값이 NULL이 아닌, 즉 데이터가 입력된 행을 찾음
+SELECT *
+FROM burgers
+WHERE description IS NULL;
+
+-- burgers 테이블에서 상품 설명이 있는 햄버거만 조회하기
+SELECT *
+FROM burgers
+WHERE description IS NOT NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
