@@ -200,7 +200,8 @@ SELECT (TRUE OR TRUE) AND FALSE;
 */
 -- Quiz: 대학 DB 만들기
 -- university DB 생성 및 진입
-
+CREATE DATABASE university;
+USE university;
 
 -- students 테이블 생성
 -- id: 아이디(정수형 숫자)
@@ -209,10 +210,17 @@ SELECT (TRUE OR TRUE) AND FALSE;
 -- english: 영어 성적(정수형 숫자)
 -- programming: 프로그래밍 성적(정수형 숫자)
 -- 기본키 지정: id
+CREATE TABLE students (
+	id INTEGER,           -- 아이디
+	nickname VARCHAR(50), -- 닉네임
+	math INTEGER, 	      -- 수학 성적
+	english INTEGER,      -- 영어 성적
+	programming INTEGER,  -- 프로그래밍 성적
+	PRIMARY KEY (id)      -- 기본키 지정: id
+);
 
-
-
-
+INSERT INTO students (id, nickname, math, english, programming)
+VALUES 
 	(1, 'Sparkles', 98, 96, 93),
 	(2, 'Soldier', 82, 66, 98),
 	(3, 'Lapooheart', 84, 70, 82),
@@ -222,18 +230,65 @@ SELECT (TRUE OR TRUE) AND FALSE;
 	(7, 'Bagel', 97, 91, 87),
 	(8, 'Queen', 99, 100, 88);
     
+-- 확인
+SELECT * FROM students;
     
 -- Quiz: 필터링 연습!
 -- 1. 모든 과목 성적이 90점 이상인 학생은?
-
+SELECT *
+FROM students
+WHERE math >= 90 AND english >= 90 AND programming >= 90;
 
 -- 2. 75점 미만이 하나라도 있는 학생은?
-
+SELECT *
+FROM students
+WHERE math < 75 OR english < 75 OR programming < 75;
 
 -- 3. 모든 학생의 총점은?
-
+SELECT *, math + english + programming AS 총점
+FROM students;
 
 -- 4. 모든 학생의 평균은?
-
+SELECT *, (math + english + programming) / 3 AS 평균
+FROM students;
 
 -- 5. 총점이 270 이상인 학생의 닉네임, 총점, 평균은?
+SELECT 
+	nickname, 
+    math + english + programming AS 총점, 
+    (math + english + programming) / 3 AS 평균
+FROM students
+WHERE (math + english + programming) >= 270;
+
+-- 별칭 부여하기: AS 키워드
+SELECT 컬럼명 AS 별칭
+FROM 테이블명;
+
+-- 별칭 사용 시, 공백 또는 특수문자 등이 필요한 경우
+-- 별칭을 따옴표("", '') 또는 백틱(``)으로 감싸야 함
+
+-- Quiz
+-- 2. 다음 쿼리에 대한 설명으로 옳지 않은 것을 모두 고르면?
+SELECT id, nickname, (math + english + programming) / 3 AS '중간고사 평균' 
+FROM students
+WHERE math > 80 AND programming > 80 OR English > 90;
+
+-- ① students 테이블에서 데이터를 조회하고 있다.
+-- ② math가 80보다 높은 학생은 반드시 조회된다.
+-- ③ english가 90보다 높은 학생은 조회될 수 있다.
+-- ④ 이 쿼리를 실행하면 그 결과로 컬럼 3개가 조회된다.
+-- ⑤ SELECT 절의 '(math + english + programming) / 3' 수식에 괄호를 삭제하고 조회해도 정상적으로 중간고사 평균이 계산된다.
+
+-- 정답: 
+
+
+
+
+
+
+
+
+
+
+
+
