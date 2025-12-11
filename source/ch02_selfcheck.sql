@@ -30,6 +30,8 @@ CREATE TABLE coffees (
     PRIMARY KEY (id)
 );
 
+DESC coffees;
+
 -- 3. coffees 테이블에 아메리카노부터 카푸치노까지 모든 데이터를 삽입하세요.
 INSERT INTO coffees (id, name, price)
 VALUES 
