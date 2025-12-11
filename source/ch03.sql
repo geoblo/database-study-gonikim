@@ -92,7 +92,13 @@ SELECT *
 FROM burgers
 WHERE description IS NOT NULL;
 
-
+-- 2) 논리 연산자
+-- 조건을 조합하거나 반전하여 새 조건을 만듦
+-- 종류: AND, OR, NOT
+-- 사용 예
+-- 조건A AND 조건B: 조건A와 조건B를 동시에 만족하는 데이터 필터링(교집합)
+-- 조건A OR 조건B: 조건A와 조건B 중 하나라도 만족하는 데이터 필터링(합집합)
+-- NOT 조건A: 조건A를 만족하지 않는 데이터 필터링(여집합)
 
 
 
