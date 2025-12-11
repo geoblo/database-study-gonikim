@@ -116,14 +116,21 @@ SELECT FALSE OR TRUE;
 SELECT FALSE OR FALSE;
 
 -- Quiz: 5500원 보다 싸고, 동시에 단백질량이 25g 보다 많은 버거
-
+SELECT *
+FROM burgers
+WHERE price < 5500 AND protein > 25;
 
 -- Quiz: 5500원 보다 싸거나, 단백질량이 25g 보다 많은 버거
-
+SELECT *
+FROM burgers
+WHERE price < 5500 OR protein > 25;
 
 -- Quiz: 단백질량이 25g 보다 많지 않은 버거
-
-
+SELECT *
+FROM burgers
+-- WHERE NOT (protein > 25);
+WHERE !(protein > 25); -- (참고) &&, ||, !는 MySQL에서만 작동
+-- 가독성과 이식성을 위해서는 AND, OR, NOT을 사용하는 것이 가장 안전
 
 
 
