@@ -115,7 +115,13 @@ SELECT TRUE OR FALSE;
 SELECT FALSE OR TRUE;
 SELECT FALSE OR FALSE;
 
+-- Quiz: 5500원 보다 싸고, 동시에 단백질량이 25g 보다 많은 버거
 
+
+-- Quiz: 5500원 보다 싸거나, 단백질량이 25g 보다 많은 버거
+
+
+-- Quiz: 단백질량이 25g 보다 많지 않은 버거
 
 
 
