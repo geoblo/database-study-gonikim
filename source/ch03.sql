@@ -100,6 +100,20 @@ WHERE description IS NOT NULL;
 -- 조건A OR 조건B: 조건A와 조건B 중 하나라도 만족하는 데이터 필터링(합집합)
 -- NOT 조건A: 조건A를 만족하지 않는 데이터 필터링(여집합)
 
+-- TRUE/FALSE의 논리 연산
+-- TRUE(참: 1), FALSE(거짓: 0)
+
+-- AND 연산: 둘 다 참이어야 참
+SELECT TRUE AND TRUE;
+SELECT TRUE AND FALSE;
+SELECT FALSE AND TRUE;
+SELECT FALSE AND FALSE;
+
+-- OR 연산: 둘 중 하나만 참이면 참
+SELECT TRUE OR TRUE;
+SELECT TRUE OR FALSE;
+SELECT FALSE OR TRUE;
+SELECT FALSE OR FALSE;
 
 
 
