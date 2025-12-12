@@ -82,6 +82,26 @@ VALUES
 -- 잘 들어갔는지 일단 확인
 SELECT * FROM employees;
 
+-- 모든 직원 수 세기
+SELECT COUNT(*)
+FROM employees;
+
+-- 부서가 있는 직원 수 세기
+SELECT COUNT(department)
+FROM employees;
+
+-- 모든 종류의 버거를 다 사면 얼마?
+-- 합계 구하기
+-- SUM()
+SELECT SUM(price)
+FROM burgers;
+
+-- 버거의 평균 가격은?
+-- 평균 구하기
+-- AVG()
+SELECT AVG(price)
+FROM burgers;
+-- (참고) 계산 과정에서 NULL은 자동으로 제외함(NULL을 0으로 취급하지 않음)
 
 
 
