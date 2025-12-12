@@ -75,6 +75,64 @@ CREATE DATABASE data_type;
 USE data_type;
 SELECT DATABASE(); -- 확인
 
+-- 학생 기록(student_records) 테이블 생성
+CREATE TABLE student_records (
+	id INT, -- 아이디(표준 정수)
+    grade TINYINT UNSIGNED, -- 학년(부호가 없는 매우 작은 정수), 0~255
+    average_score FLOAT, -- 평균 점수(부동 소수점 방식이 실수)
+    tuition_fee DECIMAL(10, 2), -- 수업료(고정 소수점 방식의 실수), 돈계산 관련은 정확하게
+    -- 전체 10자리, 소수점 이하 2자리
+    PRIMARY KEY (id)
+);
+
+-- 학생 기록 데이터 삽입
+INSERT INTO 
+	student_records(id, grade, average_score, tuition_fee)
+VALUES 
+	(1, 3, 88.75, 50000.00),
+    (2, 6, 92.5, 100000.00);
+    
+-- 데이터 조회
+SELECT * FROM student_records;
+
+-- grade 컬럼에 자료형 범위를 벗어난 값을 입력 => 에러 발생!
+INSERT INTO 
+	student_records(id, grade, average_score, tuition_fee)
+VALUES 
+	(3, -2, 88.75, 50000.00);
+
+INSERT INTO 
+	student_records(id, grade, average_score, tuition_fee)
+VALUES 
+	(3, 256, 88.75, 50000.00);
+    
+-- 2. 문자형
+-- 한글, 영어, 기호 등의 문자 저장을 위한 타입
+-- 다양한 세부 타입이 존재
+-- 종류: CHAR, VARCHAR*, TEXT, BLOB, ENUM 등
+
+-- 1) CHAR vs VARCHAR
+-- CHAR: 고정 길이(최대 255자)
+-- VARCHAR: 가변 길이(최대 65,535자)
+-- (참고) VARCHAR는 UTF-8과 같은 멀티바이트 문자셋 사용 시, 실제 저장 가능 글자 수는 줄어듦
+-- => VARCHAR(65535)는 현실적으로 불가능하고 VARCHAR(16383) 정도가 안전한 최대치
+
+-- VARCHAR(n): 최대 n 글자까지 저장되는 가변 길이 문자열
+-- 이름, 주소처럼 길이가 제각각인 데이터에 사용하면 저장 공간을 효율적으로 쓸 수 있음
+-- '홍길동'(3글자)을 VARCHAR(10)에 저장하면 실제 데이터 길이인 3글자만큼의 공간만 차지
+-- '김아무개'(4글자)을 VARCHAR(10)에 저장하면 실제 데이터 길이인 4글자만큼의 공간만 차지
+-- 데이터의 길이 확인을 위해 추가로 1~2바이트의 길이 정보 저장 공간 필요
+
+-- CHAR(n): 항상 n 글자 길이를 차지하는 고정 길이 문자열
+-- '남'(1글자)을 CHAR(2)에 저장하면, 나머지 1글자는 공백으로 채워져 무조건 2글자의 공간을 차지
+-- 성별 코드('M'/'F')나 우편번호, 국가 코드('KR'/'US')처럼 항상 길이가 정해져 있는 데이터에 사용하면, VARCHAR 보다 아주 약간의 이점을 가질 수 있음
+-- 길이가 항상 같으니, 데이터를 찾기 위해 길이를 확인할 필요가 없기 때문
+
+
+
+
+
+
 
 
 
