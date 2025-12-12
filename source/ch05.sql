@@ -511,7 +511,7 @@ VALUES
 -- (ㄹ) EXTRACT()
 -- (ㅁ) TIME_TO_SEC()
 
--- 정답: 
+-- 정답: ㄴㄷㄹㄱㅁ 
 
 
 
