@@ -161,13 +161,28 @@ CREATE TABLE articles (
     additional_info LONGTEXT -- 추가 정보(최대 4GB)
 );
 
-
-
 -- 3) BLOB(잘 쓰지 않음)
 -- 크기가 큰 파일 저장을 위한 타입
 -- 이미지, 오디오, 비디오 등의 저장에 사용
 -- 세부 타입 종류: TINYBLOB, BLOB, MEDIUMBLOB, LONGBLOB
 -- BLOB 자료형의 사용 예
+CREATE TABLE files (
+	file_name VARCHAR(200), -- 파일명
+    small_thumbnail TINYBLOB, -- 작은 이미지 파일(최대 255Byte)
+    document BLOB, -- 일반 문서 파일(최대 64KB)
+    video MEDIUMBLOB, -- 비디오 파일(최대 16MB)
+    large_data LONGBLOB -- 대용량 파일(최대 4GB)
+);
+
+-- (참고)
+-- 자바 웹 개발을 포함한 대부분의 애플리케이션에서는 이미지나 동영상 같은 대용량 파일을
+-- 데이터베이스에 직접 저장하지 않고, 클라우드 스토리지나 파일 서버 등에 저장한 뒤,
+-- 그 경로나 URL만 데이터베이스에 저장하는 방식이 사실상 표준
+
+-- 왜 DB에 직접 저장하지 않을까?
+-- DB 부하가 큼, 성능이 느림, 백업/복구 어려움 등
+
+
 
 
 
