@@ -426,6 +426,15 @@ FROM orders;
 -- EXTRACT(필드 FROM 날짜): 입력 날짜에서 특정 '필드' 추출, 예: EXTRACT(YEAR FROM '2024-04-15') => 2024
 -- 필드: YEAR, MONTH, DAY, HOUR, MINUTE, SECOND 등
 
+-- 11월에 주문받은 상품 조회
+SELECT *
+FROM orders
+WHERE MONTH(created_at) = 11;
+
+-- 11월에 주문받은 상품의 개수 총합
+SELECT SUM(quantity)
+FROM orders
+WHERE MONTH(created_at) = 11;
 
 -- 3. 시간 필터링하기
 -- 예: 오전에 주문받은 매출 합계를 구하려면?
@@ -437,12 +446,37 @@ FROM orders;
 -- SECOND(시간): 입력 시간의 '초' 추출, 예: SECOND('2024-10-04 08:30:45') => 45
 -- TIME_TO_SEC(시간): 입력 시간의 시, 분, 초를 '초'로 환산, 예: TIME_TO_SEC('08:30:45') => 30645
 
+-- 오전에 주문받은 모든 상품 조회
+SELECT *
+FROM orders
+WHERE HOUR(created_at) < 12;
 
+-- 오전에 주문받은 모든 상품 매출의 합계 조회
+SELECT SUM(price * quantity)
+FROM orders
+WHERE HOUR(created_at) < 12;
 
+-- 4. 특정 범위 필터링하기
+-- 1) BETWEEN 연산자
+-- 두 값 사이에 속하는지 확인할 때 사용하는 연산자(두 값을 포함하여 찾음)
+SELECT *
+FROM 테이블명
+WHERE 컬럼명 BETWEEN 시작_값 AND 마지막_값;
 
+-- 상품 가격이 10,000 ~ 20,000원 사이에 있는 주문은?
+SELECT *
+FROM orders
+WHERE price BETWEEN 10000 AND 20000;
 
+-- (참고) 상품 가격이 10,000 ~ 20,000원 사이가 아닌 주문은?
+SELECT *
+FROM orders
+WHERE price NOT BETWEEN 10000 AND 20000;
 
-
+-- 주문 시각이 2024-11-15 부터 2024-12-15 사이에 있는 주문의 개수는?
+SELECT COUNT(*)
+FROM orders
+WHERE created_at BETWEEN '2024-11-15' AND '2024-12-15';
 
 
 
