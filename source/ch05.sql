@@ -182,13 +182,44 @@ CREATE TABLE files (
 -- 왜 DB에 직접 저장하지 않을까?
 -- DB 부하가 큼, 성능이 느림, 백업/복구 어려움 등
 
+-- 4) ENUM(잘 쓰지 않음)
+-- 주어진 목록 중 하나만 선택할 수 있는 타입
+-- 입력 가능한 목록을 제한하여, 잘못된 입력을 예방
+-- ENUM 자료형의 예
+CREATE TABLE memberships (
+	name VARCHAR(100), -- 회원명
+    level ENUM('bronze', 'silver', 'gold') -- 회원 레벨(선택 목록 중 택1)
+);
 
+-- 실습: 문자형 사용하기
+-- 다음 데이터를 사용자 프로필(user_profiles) 테이블로 만들어 저장하려면?
 
+-- 아이디  | 이메일                  | 전화번호          | 자기소개     | 프로필 사진   | 성별
+-- -------------------------------------------------------------------------------
+-- 1     | geoblo@naver.com      | 012-3456-7890  | 안녕하십니까!  | NULL      | 남
+-- 2     | hongsoon@example.com  | 098-7654-3210  | 반갑습니다요!  | NULL      | 여
 
+-- 사용자 프로필(user_profiles) 테이블 생성
+CREATE TABLE user_profiles (
+	id , -- 아이디(표준 정수)
+    email, -- 이메일(가변 길이 문자: 최대 255자)
+    phone_number, -- 전화번호(고정 길이 문자: 13자)
+	self_introduction, -- 자기소개(긴 문자열: 최대 64KB)
+	profile_picture, -- 프로필 사진(파일: 최대 16MB)
+	gender,	-- 성별(선택 목록 중 택 1)
+    -- 기본키 지정: id
+);
 
-
-
-
+-- 사용자 프로필(user_profiles) 데이터 삽입
+INSERT INTO 
+	user_profiles (id, email, phone_number, self_introduction, profile_picture, gender)
+VALUES
+	(1, 'geoblo@naver.com', '012-3456-7890', '안녕하십니까!', NULL, '남'),
+	(2, 'hongsoon@example.com', '098-7654-3210', '반갑습니다요!', NULL, '여');
+    
+-- 데이터 조회
+SELECT *
+FROM user_profiles;
 
 
 
