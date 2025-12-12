@@ -153,6 +153,14 @@ CREATE TABLE addresses (
 -- 주로 상품의 상세 설명, 장문의 리뷰, 블로그 게시글 본문처럼 긴 글 작성에 적합
 -- 세부 타입 종류: TINYTEXT, TEXT*, MEDIUMTEXT, LONGTEXT
 -- TEXT 자료형의 사용 예
+CREATE TABLE articles (
+	title VARCHAR(200), -- 제목
+    short_description TINYTEXT, -- 짧은 설명(최대 255byte)
+    comments TEXT, -- 댓글(최대 64KB)
+    content MEDIUMTEXT, -- 본문(최대 16MB)
+    additional_info LONGTEXT -- 추가 정보(최대 4GB)
+);
+
 
 
 -- 3) BLOB(잘 쓰지 않음)
