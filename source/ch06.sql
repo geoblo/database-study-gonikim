@@ -102,12 +102,40 @@ CREATE TABLE users (
     PRIMARY KEY (id) -- 기본키 지정: id
 );
 
--- 
+-- 제약 조건 위반 시 테스트
+-- 사용자명(NOT NULL)에 NULL 값을 입력 시도
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', NULL);
+-- Error Code: 1048. Column 'name' cannot be null
 
+-- 이메일(UNIQUE)에 중복 값을 입력 시도
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', '김');
 
+INSERT INTO users (email, name)
+VALUES ('geoblo@naver.com', '재');
+-- Error Code: 1062. Duplicate entry 'geoblo@naver.com' for key 'users.email'
 
+-- 기본키(PK)에 중복 값을 입력 시도
+INSERT INTO users (id, email, name)
+VALUES (1, 'hyun@naver.com', '현');
+-- Error Code: 1062. Duplicate entry '1' for key 'users.PRIMARY'
 
+-- 나이(age >= 18)에 18세 미만 값을 입력 시도
+INSERT INTO users (email, name, age)
+VALUES ('hyun@naver.com', '현', 15);
+-- Error Code: 3819. Check constraint 'users_chk_1' is violated.
 
+-- Quiz: 제약 조건 걸기
+CREATE TABLE products (
+  id INTEGER,           -- 상품 ID(자동 증가)
+  name VARCHAR(100),    -- 상품명(고유한 값만 허용)
+  category VARCHAR(50), -- 상품 카테고리(NULL 불가)
+  status VARCHAR(20),   -- 상품 상태(기본값: available)
+  dc_rate INTEGER,      -- 할인율(0~50% 제한)
+  stock INTEGER,        -- 재고 수량(음수 불가)
+                        -- 기본키 설정: id
+);
 
 
 
