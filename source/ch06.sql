@@ -475,6 +475,7 @@ CREATE TABLE enrollments (
 
 /*
 	6.3 관계 만들기 실습: 별그램 DB
+    참고: https://www.notion.so/2c9ef6e7ff1c80fd97c8d3c5276ab142
 */
 -- 사진 공유 SNS, 별그램 DB를 만들며 다양한 관계 생성 훈련!
 
