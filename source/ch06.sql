@@ -401,7 +401,7 @@ SELECT * FROM appointments;
 -- ② '이 닥터'는 3회의 진료 기록이 있다. (  )
 -- ③ '환자 C'는 '최 닥터'에게 진료를 받았다. (  )
 
--- 정답: 
+-- 정답: O, X, O
 
 -- 3. 다음 설명이 맞으면 O, 틀리면 X를 표시하시오.
 -- ① 두 테이블 간 일대일 관계는 어느 쪽에 외래키를 지정해도 무방하나 대게 테이블의 사용 빈도가 적은 쪽에 지정한다. 
@@ -409,7 +409,80 @@ SELECT * FROM appointments;
 -- ② 두 테이블 간 일대다 관계는 '일' 쪽 테이블에 외래키를 지정한다. (  )
 -- ③ 두 테이블 간 다대다 관계는 중간 테이블을 만들어 두 테이블의 기본키를 참조하도록 외래키를 지정한다. (  )
 
--- 정답: 
+-- 정답: O, X, O
+
+
+-- Quiz: 관계 맺기
+-- 1. 사람과 여권(한 사람은 한 개의 여권을 가지고, 한 여권은 한 사람에게만 발급)
+-- 사람 테이블
+CREATE TABLE persons (
+  id INTEGER,        -- ID
+  name VARCHAR(50),  -- 이름
+     -- 기본키 지정: id
+);
+
+-- 여권 테이블
+CREATE TABLE passports (
+  id INTEGER,                  -- ID
+  passport_number VARCHAR(20), -- 여권 번호
+      -- 사람_ID
+              -- 기본키 지정: id
+           -- 외래키 지정: person_id
+);
+
+-- 2. 회사와 직원(한 회사는 여러 직원을 고용할 수 있지만, 한 직원은 하나의 회사에만 소속)
+-- 회사 테이블
+CREATE TABLE companies (
+  id INTEGER,       -- ID
+  name VARCHAR(50), -- 회사명
+    -- 기본키 지정: id
+);
+
+-- 직원 테이블
+CREATE TABLE employees (
+  id INTEGER,             -- ID
+  name VARCHAR(50),       -- 직원명
+       -- 회사_ID
+         -- 기본키 지정: id
+       -- 외래키 지정: company_id
+);
+
+-- 3. 학생과 과목(한 학생은 여러 과목을 수강하고, 한 과목은 여러 학생이 수강할 수 있음)
+-- 학생 테이블
+CREATE TABLE students (
+  id INTEGER,          -- ID
+  name VARCHAR(50),    -- 학생명
+       -- 기본키 지정: id
+);
+
+-- 과목 테이블
+CREATE TABLE subjects (
+  id INTEGER,        -- ID
+  title VARCHAR(50), -- 과목명
+     -- 기본키 지정: id
+);
+
+-- 수강 테이블(중간 테이블)
+CREATE TABLE enrollments (
+  id INTEGER,          -- ID
+    -- 학생_ID
+    -- 과목_ID
+      -- 기본키 지정: id
+   -- 외래키 지정: student_id
+    -- 외래키 지정: subject_id
+);
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
