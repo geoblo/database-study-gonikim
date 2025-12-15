@@ -181,6 +181,25 @@ REFERENCES [부모_테이블명]([부모_테이블의_컬럼명])
 [ON DELETE 옵션] [ON UPDATE 옵션]
 */
 
+-- (참고) ON DELETE / ON UPDATE 옵션
+-- 데이터베이스가 부모 데이터의 삭제나 수정을 무조건 막는 것이 기본값(RESTRICT)이며 가장 안전한 정책
+-- 하지만 상황에 따라 다른 정책이 필요할 수 있음 
+-- 예를 들어 회원이 탈퇴하면, 그 회원의 모든 작성 글, 주문 기록 등이 함께 삭제되어야 할 때
+-- 이럴 때 사용하는 것이 외래키의 ON DELETE 와 ON UPDATE 옵션
+-- RESTRICT(기본값): 자식 테이블에 참조하는 행이 있으면 부모 테이블의 행을 삭제/수정할 수 없다.
+-- CASCADE: 부모 테이블의 행이 삭제/수정되면, 그를 참조하는 자식 테이블의 행도 함께 자동으로 삭제/수정된다.
+-- SET NULL: 부모 테이블의 행이 삭제/수정되면, 자식 테이블의 해당 외래 키 컬럼의 값을 NULL로 설정한다.
+-- (단, 이 옵션을 쓰려면 자식 테이블의 외래 키 컬럼이 NULL을 허용해야 함)
+
+-- 실무에서는 CASCADE 옵션을 잘못 사용할 경우 예상치 못한 대량의 데이터가 함께 삭제되는 경우가 있음
+-- 특히 관계가 복잡하게 얽혀 있는 경우에는 파급 효과를 예측하기 어려움
+-- 이런 문제로 실무에서는 CASCADE 옵션은 잘 사용하지 않고 대신에 애플리케이션 계층에서 명시적으로 관련된 데이터를 처리하는 방식이 더 선호됨
+-- 즉, 애플리케이션에서 부모 데이터를 지울 때 자식 데이터를 먼저 찾아 지우도록 코드를 작성
+
+
+
+
+
 -- 1. 일대일 관계 만들기
 -- A 테이블의 한 데이터가 B 테이블의 한 데이터와만 연결된 관계
 -- 서로 긴밀한 연관성이 있거나, 하나의 테이블에서 분화된 경우의 관계
@@ -234,6 +253,17 @@ VALUES
 SELECT * FROM countries;
 SELECT * FROM capitals;
 
+-- 참조 무결성 위반 시 테스트
+INSERT INTO capitals (id, name, country_id)
+VALUES (104, 'Paris', 999); -- 999는 부모 테이블에 없는 id
+-- Error Code: 1452. Cannot add or update a child row: a foreign key constraint fails (`relation`.`capitals`, CONSTRAINT `capitals_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`))
+
+DELETE FROM countries 
+WHERE id = 1; -- 이 나라를 참조하는 수도(자식 테이블)가 있기 때문에 삭제 불가
+-- Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails (`relation`.`capitals`, CONSTRAINT `capitals_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`))
+-- 이 경우에는 자식 테이블에 참조하는 데이터를 모두 삭제하고 부모 테이블에서 삭제하면 가능
+DELETE FROM capitals 
+WHERE id = 101;
 
 
 -- 2. 일대다 관계 만들기
