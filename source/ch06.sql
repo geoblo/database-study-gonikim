@@ -128,14 +128,88 @@ VALUES ('hyun@naver.com', '현', 15);
 
 -- Quiz: 제약 조건 걸기
 CREATE TABLE products (
-  id INTEGER,           -- 상품 ID(자동 증가)
-  name VARCHAR(100),    -- 상품명(고유한 값만 허용)
-  category VARCHAR(50), -- 상품 카테고리(NULL 불가)
-  status VARCHAR(20),   -- 상품 상태(기본값: available)
-  dc_rate INTEGER,      -- 할인율(0~50% 제한)
-  stock INTEGER,        -- 재고 수량(음수 불가)
-                        -- 기본키 설정: id
+  id INTEGER AUTO_INCREMENT,                              -- 상품 ID(자동 증가)
+  name VARCHAR(100) UNIQUE,                               -- 상품명(고유한 값만 허용)
+  category VARCHAR(50) NOT NULL,                          -- 상품 카테고리(NULL 불가)
+  status VARCHAR(20) DEFAULT 'available',                 -- 상품 상태(기본값: available)
+  dc_rate INTEGER CHECK (dc_rate >= 0 AND dc_rate <= 50), -- 할인율(0~50% 제한)
+  -- dc_rate INTEGER CHECK (dc_rate BETWEEN 0 AND 50),
+  -- dc_rate INTEGER CHECK (0 <= dc_rate <= 50)           -- 문법 에러는 안나지만 제대로 동작 안함
+  stock INTEGER UNSIGNED,                                 -- 재고 수량(음수 불가)
+  PRIMARY KEY (id)                                        -- 기본키 설정: id
 );
+
+-- (참고) Tip! 날짜와 기본값 설정 옵션
+CREATE TABLE boards (
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- 이 기능을 사용하면 행이 추가되거나 변경될 때 날짜를 편리하게 관리할 수 있음
+-- DEFAULT CURRENT_TIMESTAMP: 새로운 데이터 행이 추가될 때,
+-- 해당 컬럼에 별도의 값을 지정하지 않으면 현재 날짜와 시간이 자동으로 입력됨
+-- ON UPDATE CURRENT_TIMESTAMP: 같은 행의 컬럼 값이 변경되어 업데이트될 때,
+-- 이 컬럼의 값은 현재 날짜와 시간으로 자동 갱신됨
+
+
+-- Quiz
+-- 1. 다음 빈칸에 들어갈 용어를 순서대로 고르세요. (예: ㄱㄴㄷㄹㅁ)
+-- ① __________: 여러 테이블에 분산 저장된 데이터가 서로 어떻게 연결돼 있는지를 정의한 개념
+-- ② __________: 테이블 내 모든 레코드를 유일하게 구분하는 컬럼 또는 컬럼의 조합
+-- ③ __________: 한 번 설정된 값은 변경될 수 없다는 성질
+-- ④ __________: 데이터가 존재하지 않는 상태
+-- ⑤ __________: 다른 테이블의 기본키를 가리키는 컬럼으로 두 테이블 간 관계를 만드는 컬럼
+
+-- (ㄱ) 불변성
+-- (ㄴ) 관계
+-- (ㄷ) 외래키(FK)
+-- (ㄹ) NULL
+-- (ㅁ) 기본키(PK)
+
+-- 정답: 
+
+
+/*
+	6.2 다양한 관계 만들기
+*/
+-- 외래키와 기본키를 연결하여 일대일/일대다/다대다 관계를 만들어 보자
+
+-- 외래키 제약 조건의 문법
+/*
+CONSTRAINT [제약조건_이름]
+FOREIGN KEY ([자식_테이블의_컬럼명]) 
+REFERENCES [부모_테이블명]([부모_테이블의_컬럼명]) 
+[ON DELETE 옵션] [ON UPDATE 옵션]
+*/
+
+-- 1. 일대일 관계 만들기
+-- A 테이블의 한 데이터가 B 테이블의 한 데이터와만 연결된 관계
+-- 서로 긴밀한 연관성이 있거나, 하나의 테이블에서 분화된 경우의 관계
+-- 일대일 관계에서 외래키의 위치는 양쪽 테이블 중 어느 곳에 두어도 되지만 사용 빈도가 더 적은 쪽에 두는 것이 일반적임
+
+
+-- 2. 일대다 관계 만들기
+-- A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결되는 관계
+-- 하나의 데이터에 여러 데이터가 포함되거나 소유되는 경우
+-- 일대다 관계에서는 '다' 쪽 테이블에 외래키 지정
+
+
+-- 3. 다대다 관계 만들기
+-- A와 B 테이블 서로가 다수의 데이터와 연결되는 관계
+-- - A 테이블의 한 데이터가 B 테이블의 여러 데이터와 연결
+-- - B 테이블의 한 데이터 또한 A 테이블의 여러 데이터와 연결
+-- 중간 테이블을 경유하여 A와 B가 연결됨
+-- 다대다 관계에서는 중간 테이블을 만들어 외래키 지정
+
+
+
+
+
+
+
+
+
+
+
 
 
 
