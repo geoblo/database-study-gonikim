@@ -226,6 +226,7 @@ CREATE TABLE capitals (
 );
 
 -- (참고) 실무에서는 보통 명시적으로 CONSTRAINT 이름을 주는 것을 권장(유지보수, 디버깅 편리)
+-- fk_<자식테이블>_<부모테이블>
 -- CONSTRAINT fk_capitals_countries FOREIGN KEY (country_id) REFERENCES countries(id)
 -- CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES countries(customer_id)
 
@@ -418,16 +419,16 @@ SELECT * FROM appointments;
 CREATE TABLE persons (
   id INTEGER,        -- ID
   name VARCHAR(50),  -- 이름
-     -- 기본키 지정: id
+  PRIMARY KEY (id)   -- 기본키 지정: id
 );
 
 -- 여권 테이블
 CREATE TABLE passports (
   id INTEGER,                  -- ID
   passport_number VARCHAR(20), -- 여권 번호
-      -- 사람_ID
-              -- 기본키 지정: id
-           -- 외래키 지정: person_id
+  person_id INT UNIQUE,    -- 사람_ID
+  PRIMARY KEY (id),            -- 기본키 지정: id
+  FOREIGN KEY (person_id) REFERENCES persons(id) -- 외래키 지정: person_id
 );
 
 -- 2. 회사와 직원(한 회사는 여러 직원을 고용할 수 있지만, 한 직원은 하나의 회사에만 소속)
@@ -435,16 +436,16 @@ CREATE TABLE passports (
 CREATE TABLE companies (
   id INTEGER,       -- ID
   name VARCHAR(50), -- 회사명
-    -- 기본키 지정: id
+  PRIMARY KEY (id)  -- 기본키 지정: id
 );
 
 -- 직원 테이블
 CREATE TABLE employees (
   id INTEGER,             -- ID
   name VARCHAR(50),       -- 직원명
-       -- 회사_ID
-         -- 기본키 지정: id
-       -- 외래키 지정: company_id
+  company_id INT,         -- 회사_ID
+  PRIMARY KEY (id),       -- 기본키 지정: id
+  FOREIGN KEY (company_id) REFERENCES companies(id) -- 외래키 지정: company_id
 );
 
 -- 3. 학생과 과목(한 학생은 여러 과목을 수강하고, 한 과목은 여러 학생이 수강할 수 있음)
@@ -452,27 +453,44 @@ CREATE TABLE employees (
 CREATE TABLE students (
   id INTEGER,          -- ID
   name VARCHAR(50),    -- 학생명
-       -- 기본키 지정: id
+  PRIMARY KEY (id)     -- 기본키 지정: id
 );
 
 -- 과목 테이블
 CREATE TABLE subjects (
   id INTEGER,        -- ID
   title VARCHAR(50), -- 과목명
-     -- 기본키 지정: id
+  PRIMARY KEY (id)   -- 기본키 지정: id
 );
 
 -- 수강 테이블(중간 테이블)
 CREATE TABLE enrollments (
   id INTEGER,          -- ID
-    -- 학생_ID
-    -- 과목_ID
-      -- 기본키 지정: id
-   -- 외래키 지정: student_id
-    -- 외래키 지정: subject_id
+  student_id INT,      -- 학생_ID
+  subject_id INT,      -- 과목_ID
+  PRIMARY KEY (id),     -- 기본키 지정: id
+  FOREIGN KEY (student_id) REFERENCES students(id), -- 외래키 지정: student_id
+  FOREIGN KEY (subject_id) REFERENCES subjects(id)  -- 외래키 지정: subject_id
 );
 
+/*
+	6.3 관계 만들기 실습: 별그램 DB
+*/
+-- 사진 공유 SNS, 별그램 DB를 만들며 다양한 관계 생성 훈련!
 
+-- 별그램 DB의 테이블 개요
+-- • users(사용자): 사용자의 '아이디', '닉네임, '이메일'을 저장합니다.
+-- • photos(사진): 사진의 '아이디', '파일명', '게시자 아이디'를 저장합니다.
+-- • comments(댓글): 댓글의 '아이디', '본문', 작성자 아이디', '댓글이 달린 사진 아이디'를 저장합니다.
+-- • settings(개인 설정): 사용자 개인 설정의 '아이디, '계정 공개 여부', '계정 추천 여부', '사용자 아이디'를 저장합니다.
+-- • likes(좋아요): 좋아요의 '아이디', '좋아요를 누른 사용자 아이디', '좋아요를 받은 사진 아이디'를 저장합니다.
+
+-- 5개의 테이블은 다음과 같은 관계를 가짐
+-- • 일대일 관계: '사용자'는 개인별로 하나의 '개인 설정' 값만 가질 수 있습니다.
+-- • 일대다 관계: '사용자'는 여러 장의 '사진'을 게시할 수 있습니다.
+-- • 다대다 관계:
+-- - '사용자'는 여러 '사진'에 댓글을 작성할 수 있고, '사진' 또한 여러 '사용자'로부터 댓글을 받을 수 있습니다.
+-- - '사용자'는 여러 '사진'에 좋아요를 누를 수 있고, '사진' 또한 여러 '사용자'로부터 좋아요를 받을 수 있습니다.
 
 
 
