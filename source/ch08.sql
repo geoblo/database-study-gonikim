@@ -96,11 +96,42 @@ VALUES
 
 SELECT * FROM sales;
 
+-- 일단 먼저 특정 도시별 총매출 집계
+SELECT city, SUM(amount)
+FROM sales
+GROUP BY city;
 
+-- 특정 도시의 연도별 총매출 집계
+SELECT 
+	city AS '도시', 
+    YEAR(sale_date) AS '판매 연도', 
+    SUM(amount) AS '총 매출'
+FROM sales
+GROUP BY city, YEAR(sale_date);
 
+-- 3) SELECT 절에 올 수 있는 컬럼이 제한적이다.
+-- 사용 가능한 컬럼:
+-- - 그룹화 컬럼: GROUP BY 절에서 지정한 컬럼(그룹을 대표하는 값이라 가능)
+-- - 집계된 컬럼: 집계 함수에 사용된 컬럼(그룹 전체를 요약한 값이라 가능)
 
+-- 잘못된 컬럼 사용 예시
+SELECT id, gender, AVG(height) -- 집계되지 않은 id 컬럼은 사용 못함
+FROM students
+GROUP BY gender;
 
+-- 이렇게는 가능
+SELECT SUM(id), gender, AVG(height)
+FROM students
+GROUP BY gender;
 
+-- Quiz
+-- 1. 다음 설명이 맞으면 O, 틀리면 X를 표시하시오.
+-- ① 그룹화 분석이란 데이터를 특정 그룹으로 나누어 분석하는 것이다. (  )
+-- ② GROUP BY 절에는 반드시 하나의 컬럼만 지정해야 한다. (  )
+-- ③ 그룹화된 쿼리에서 SELECT 절에 포함된 컬럼은 
+-- GROUP BY 절에서 지정한 그룹화 컬럼이거나 집계 함수에 사용된 컬럼이어야 한다. (  )
+
+-- 정답: 
 
 
 
