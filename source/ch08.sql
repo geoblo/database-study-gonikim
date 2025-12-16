@@ -13,8 +13,15 @@
 CREATE DATABASE group_analysis;
 USE group_analysis;
 
+CREATE TABLE students (
+	id INT AUTO_INCREMENT,
+    gender VARCHAR(10),
+    height DECIMAL(4, 1),
+    PRIMARY KEY (id)
+);
 
-
+INSERT INTO students (gender, height)
+VALUES
 	('male', 176.6),
 	('female', 165.5),
 	('female', 159.3),
@@ -25,6 +32,78 @@ USE group_analysis;
     
 -- 확인
 SELECT * FROM students;
+
+-- 전체 집계: 전체 학생의 평균 키 구하기
+SELECT AVG(height)
+FROM students;
+
+-- 남학생의 평균 키
+SELECT AVG(height)
+FROM students
+WHERE gender = 'male';
+
+-- 여학생의 평균 키
+SELECT AVG(height)
+FROM students
+WHERE gender = 'female';
+
+-- 그룹화 분석: 각 성별 평균 키 구하기
+-- GROUP BY: 특정 컬럼의 값이 같은 행들을 하나의 그룹으로 묶어주는 역할
+SELECT 그룹화_컬럼, 집계_함수(일반_컬럼) -- 각 그룹에 대한 통계를 낼 수 있음
+FROM 테이블명
+WHERE 조건
+GROUP BY 그룹화_컬럼; -- 그룹화의 기준이 될 컬럼
+
+SELECT gender, AVG(height)
+FROM students
+GROUP BY gender;
+
+-- 그룹화의 특징 3가지
+-- 1) 집계 함수와 함께 사용해야 함
+-- 그룹별 유의미한 분석을 얻기 위해서는 집계 함수를 사용해야 함
+-- 단순 GROUP BY 절만 사용하는 것은 데이터를 그룹으로 묶기만 함
+SELECT gender
+FROM students
+GROUP BY gender;
+
+-- 2) 여러 컬럼으로 그룹화 할 수 있다.
+SELECT 그룹화_컬럼1, 그룹화_컬럼2, 집계_함수(일반_컬럼)
+FROM 테이블명
+WHERE 조건
+GROUP BY 그룹화_컬럼1, 그룹화_컬럼2; -- 컬럼1로 먼저 그룹화하고, 그 안에서 다시 컬럼2로 그룹화
+
+-- 예: 특정 도시의 연도별 총매출 집계
+CREATE TABLE sales (
+	id INT AUTO_INCREMENT,
+    city VARCHAR(50) NOT NULL, -- 도시명
+    sale_date DATE NOT NULL, -- 판매 날짜
+    amount INT NOT NULL, -- 판매 금액
+    PRIMARY KEY (id)
+);
+
+INSERT INTO sales (city, sale_date, amount) 
+VALUES
+	('Seoul', '2023-01-15', 1000),
+	('Seoul', '2023-05-10', 2000),
+	('Seoul', '2023-08-29', 2500),
+	('Seoul', '2024-02-14', 4000),
+	('Busan', '2023-03-05', 1500),
+	('Busan', '2024-05-10', 1800),
+	('Busan', '2024-07-20', 3000),
+	('Incheon', '2023-11-25', 1200),
+	('Incheon', '2024-03-19', 2200),
+	('Incheon', '2024-09-12', 3300);
+
+SELECT * FROM sales;
+
+
+
+
+
+
+
+
+
 
 
 
