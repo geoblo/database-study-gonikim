@@ -166,7 +166,20 @@ JOIN users AS u ON c.user_id = u.id;
 -- => 양쪽 테이블에 모두 공통으로 존재하는 데이터만을 결과로 보여줌(교집합에 해당)
 -- 실무에서는 대부분 INNER 키워드 생략
 
+-- 형식
+SELECT 컬럼명1, 컬럼명2, ...
+FROM 테이블A
+INNER JOIN 테이블B ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼;
 
+-- Quiz: photos 테이블과 users 테이블 INNER 조인
+SELECT *
+FROM photos p
+JOIN users u ON p.user_id = u.id;
+
+-- INNER JOIN은 조인의 방향이 바뀌어도 결과에는 영향이 없음
+SELECT *
+FROM users u
+JOIN photos p ON p.user_id = u.id;
 
 -- 2. 외부 조인(OUTER JOIN)
 -- 두 테이블 간의 조인 결과에 누락된 행을 포함시킬 수 있는 조인 방식
@@ -184,7 +197,15 @@ JOIN users AS u ON c.user_id = u.id;
 -- 왼쪽 테이블은 모든 데이터를 가져오지만, 오른쪽 테이블은 조인 조건을 만족하는 것만 가져옴
 -- 조인 조건을 만족하지 않는 경우, NULL 값으로 채움
 
+-- 형식
+SELECT 컬럼명1, 컬럼명2, ...
+FROM 테이블A
+LEFT JOIN 테이블B ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼;
 
+-- photos 테이블과 user 테이블 LEFT 조인
+SELECT *
+FROM photos p
+LEFT JOIN users u ON p.user_id = u.id;
 
 -- 2-2. RIGHT 조인
 -- 오른쪽 테이블(JOIN 절 테이블)의 모든 데이터에 왼쪽 테이블(FROM 절 테이블)을 조인함
@@ -192,14 +213,45 @@ JOIN users AS u ON c.user_id = u.id;
 -- 조인 조건을 만족하지 않는 경우, NULL 값으로 채움
 -- LEFT 조인에서 기준만 바뀌고 동일하기에 거의 사용되지 않음
 
+-- 형식
+SELECT 컬럼명1, 컬럼명2, ...
+FROM 테이블A
+RIGHT JOIN 테이블B ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼;
 
-
+-- photos 테이블과 user 테이블 RIGHT 조인
+SELECT *
+FROM photos p
+RIGHT JOIN users u ON p.user_id = u.id;
 
 -- 2-3. FULL 조인
 -- 두 테이블의 모든 데이터를 결합하는 조인
 -- 조인 불가능한 것은 NULL 값으로 채움
 -- LEFT 조인 + RIGHT 조인의 결과에 중복을 제거한 것(합집합)
 -- 두 테이블에 조인 컬럼 값이 같은 데이터뿐만 아니라, 한쪽 테이블에 존재하는 데이터도 모두 반환
+
+-- 실무에서는 잘 사용하지 않고, MySQL은 FULL 조인을 지원하지 않음
+-- 형식
+SELECT 컬럼명1, 컬럼명2, ...
+FROM 테이블A
+FULL JOIN 테이블B ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼;
+
+-- 3. UNION 연산자
+-- 두 쿼리의 결과를 하나의 테이블로 합치는 집합 연산자
+-- SELECT 결과를 단순히 위아래로 붙이는 연산
+-- UNION을 사용하려면 반드시 지켜야 할 규칙
+-- 1) UNION으로 연결되는 모든 SELECT 문은 "컬럼 개수가 동일" 해야 하고,
+-- 2) "각 컬럼의 자료형이 서로 호환 가능한 타입" 이어야 함(예: 숫자 타입은 숫자 타입끼리, 문자 타입은 문자 타입끼리)
+
+-- 사용 예: 
+-- 대학교의 학생 정보를 재학생과 졸업생으로 별도의 테이블로 나눠서 보관한다고 가정했을 때,
+-- 새해를 맞아 모든 학생(재학중 + 졸업)에게 신년인사 이메일을 보내기 위해, 
+-- 두 테이블에 흩어져 있는 이름과 이메일을 합쳐서 하나의 전체 목록을 만들어야 한다면
+-- JOIN 으로는 해결 불가 => 이유? 두 테이블은 서로 연결된 관계가 아니라, 구조는 비슷하지만 분리된 별개의 집합이기 때문
+
+
+
+
+
 
 
 
