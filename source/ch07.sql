@@ -146,7 +146,7 @@ JOIN users AS u ON c.user_id = u.id;
 -- FROM comments ① __________
 -- ② __________ photos AS p ③ __________ c.photo_id = p.id;
 
--- 정답: 
+-- 정답: AS c, JOIN, ON
 
 -- 2. 다음 조인에 대한 설명으로 옳지 않은 것은?
 -- ① 조인 컬럼은 자료형이 달라도 된다.
@@ -154,7 +154,7 @@ JOIN users AS u ON c.user_id = u.id;
 -- ③ 중복 컬럼은 '테이블명.컬럼명'과 같이 테이블명을 붙여 구분한다.
 -- ④ 조인 테이블에 별칭을 붙일 때는 AS 키워드를 사용한다.
 
--- 정답: 
+-- 정답: 1
 
 
 /*
