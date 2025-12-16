@@ -247,10 +247,23 @@ FULL JOIN 테이블B ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼;
 -- 새해를 맞아 모든 학생(재학중 + 졸업)에게 신년인사 이메일을 보내기 위해, 
 -- 두 테이블에 흩어져 있는 이름과 이메일을 합쳐서 하나의 전체 목록을 만들어야 한다면
 -- JOIN 으로는 해결 불가 => 이유? 두 테이블은 서로 연결된 관계가 아니라, 구조는 비슷하지만 분리된 별개의 집합이기 때문
+SELECT name, email FROM students -- 재학생
+UNION
+SELECT name, email FROM graduates; -- 졸학생
 
-
-
-
+-- (참고) UNION 연산을 활용하면 FULL 조인 결과를 생성 가능
+-- photos 테이블과 users 테이블 FULL 조인 = LEFT 조인 + RIGHT 조인 + 중복 제거 => UNION
+(
+	SELECT *
+    FROM photos p
+    LEFT JOIN users u ON p.user_id = u.id
+)
+UNION
+(
+	SELECT *
+    FROM photos p
+    RIGHT JOIN users u ON p.user_id = u.id
+);
 
 
 
