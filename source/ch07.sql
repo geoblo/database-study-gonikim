@@ -353,21 +353,43 @@ UNION ALL -- 단순히 두 쿼리의 결과 테이블을 위아래로 붙임
 
 -- 1. 특정 사용자가 올린 사진 목록 출력하기
 -- 예: 홍팍이 업로드한 모든 사진의 파일명은?
+SELECT 
+	nickname AS 게시자,
+    filename AS 파일명
+FROM users u
+JOIN photos p ON u.id = p.user_id
+WHERE nickname = '홍팍';
 
+-- (참고) 또는 필터링을 조인과 동시에 가능
+SELECT 
+	nickname AS 게시자,
+    filename AS 파일명
+FROM users u
+JOIN photos p 
+	ON u.id = p.user_id
+	AND nickname = '홍팍';
 
 -- 2. 특정 사용자가 올린 사진의 좋아요 개수
 -- 예: 홍팍이 올린 모든 사진의 좋아요 개수는?
-
+SELECT COUNT(*) -- 5) 개수 카운팅
+FROM users u -- 1) 사용자 정보를 가지고
+JOIN photos p ON u.id = p.user_id -- 2) 사진 정보를 합치고
+JOIN likes l ON p.id = l.photo_id -- 3) 좋아요 정보도 합쳐서(좋아요가 눌린 사진을 기준)
+WHERE nickname = '홍팍'; -- 4) 홍팍이 올린 것만
 
 -- 3. 특정 사용자가 쓴 댓글 개수
 -- 예: 해삼이가 작성한 모든 댓글의 개수는?
-
-
+SELECT COUNT(*)
+FROM comments c
+JOIN users u ON c.user_id = u.id
+WHERE nickname = '해삼';
 
 -- 4. 모든 댓글의 본문과 해당 댓글이 달린 사진의 파일명은?
-
-
-
+SELECT 
+	body AS '댓글 내용',
+    filename AS '파일명'
+FROM comments c
+LEFT JOIN photos p ON c.photo_id = p.id;
 
 -- Quiz
 -- 4. 다음 설명이 맞으면 O, 틀리면 X를 순서대로 표시하시오. (예: O, X, O, X)
