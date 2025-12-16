@@ -43,17 +43,39 @@
 -- 이 두 테이블을 name으로 조인하여 고객과 직원의 이름이 같은 경우를 찾아낼 수 있다.
 
 
+-- 조인 하기
+-- 특정 사진에 달린 모든 댓글의 작성자 닉네임과 댓글 본문을 조회하는 법?
 
+USE stargram;
 
+-- 1번 사진 댓글 정보 조회
+SELECT *
+FROM comments
+WHERE photo_id = 1;
 
+-- 테이블 조인 형식
+SELECT 컬럼명1, 컬럼명2, ...
+FROM 테이블A -- 기준이 되는 첫번째 테이블 지정
+JOIN 테이블B -- 연결할 두번째 테이블 지정(JOIN만 명시하면 기본적으로 INNER JOIN으로 해석)
+ON 테이블A.조인_컬럼 = 테이블B.조인_컬럼; -- (중요) 두 테이블을 어떤 조건으로 연결할지 명시하는 연결고리
+-- ON 절의 조건이 참(true)이 되는 행들만 결과에 포함
 
+-- 댓글 본문과 사용자 닉네임을 합쳐서 가져오기
+-- comments 테이블과 users 테이블 조인
+SELECT *
+FROM comments
+JOIN users ON comments.user_id = users.id;
+-- JOIN users: 사용자 테이블을 붙일건데
+-- ON: 댓글 테이블의 외래키 = 사용자 테이블의 기본키가 같은 것끼리
 
+-- 결과에서 볼 수 있듯이 조인은 쉽게 이야기해서 테이블을 옆으로 붙이는 것!!
 
-
-
-
-
-
+-- 1번 사진에 달린 모든 댓글 본문과 작성자 닉네임 가져오기
+SELECT nickname, body -- 4) 닉네임과 댓글 본문을 조회한다.
+FROM comments -- 1) 댓글 테이블에
+JOIN users -- 2) 사용자 테이블을 조인한다.
+  ON comments.user_id = users.id -- 해당 조건으로
+WHERE photo_id = 1; -- 3) 1번 사진과 관련된 것만 남긴 후
 
 
 
