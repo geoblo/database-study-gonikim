@@ -146,7 +146,7 @@ JOIN users AS u ON c.user_id = u.id;
 -- FROM comments ① __________
 -- ② __________ photos AS p ③ __________ c.photo_id = p.id;
 
--- 정답: AS c, JOIN, ON
+-- 정답: 
 
 -- 2. 다음 조인에 대한 설명으로 옳지 않은 것은?
 -- ① 조인 컬럼은 자료형이 달라도 된다.
