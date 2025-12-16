@@ -281,14 +281,62 @@ UNION ALL
 -- 사용 예: '전자기기' 카테고리 상품을 한 번이라도 구매한 고객과 
 -- '도서' 카테고리 상품을 한 번이라도 구매한 고객을 대상으로 할인 쿠폰을 발송하려고 한다.
 -- 두 카테고리 모두 구매한 고객에게는 쿠폰을 중복 발송하려고 한다면 UNION ALL을 사용
+SELECT DISTINCT o.customer_id
+FROM orders o
+JOIN products p ON o.product_id = p.product_id
+WHERE p.category = '전자기기'
 
+UNION ALL
 
+SELECT DISTINCT o.customer_id
+FROM orders o
+JOIN products p ON o.product_id = p.product_id
+WHERE p.category = '도서';
 
+-- UNION ALL 결과 확인
+(
+	SELECT *
+    FROM photos p
+    LEFT JOIN users u ON p.user_id = u.id
+)
+UNION ALL -- 단순히 두 쿼리의 결과 테이블을 위아래로 붙임
+(
+	SELECT *
+    FROM photos p
+    RIGHT JOIN users u ON p.user_id = u.id
+);
 
+-- (참고) UNION과 UNION ALL의 성능 비교
+-- UNION ALL이 UNION 보다 훨씬 빠르다.
+-- UNION: 두 결과를 합친 뒤, 중복을 제거하기 위해 데이터베이스는 추가 작업을 수행
+-- 보통 전체 결과를 정렬한 다음, 서로 인접한 행들을 비교하여 중복을 찾아내는 과정을 거침
+-- 데이터의 양이 수십만, 수백만 건이라면 이 정렬과 비교 작업은 많은 비용과 시간을 소모
+-- UNION ALL: 이런 추가 작업이 전혀 없음
+-- 그냥 첫 번째 SELECT 결과 아래에 두 번째 SELECT 결과를 가져다 붙이기만 하면 끝
 
+-- 그럼 실무에서는
+-- 1. 중복을 제거해야만 하는 명확한 요구사항이 있을 때만 UNION을 사용
+-- (예: 고유한 이메일 주소 목록, 고유한 고객 ID 목록 등)
+-- 2. 그 외의 모든 경우에는 UNION ALL을 우선적으로 사용
+-- 두 결과 집합에 중복이 발생할 수 없다는 것을 명확히 아는 경우
+-- 또는 중복이 발생해도 상관없는 경우
+-- 즉, 중복을 제거할 필요가 없다면, 항상 UNION ALL을 사용
 
+-- Quiz
+-- 3. 다음 빈칸에 들어갈 용어를 차례대로 쓰시오. (예: ㄱㄴㄷㄹㅁ)
+-- ① __________: 가장 기본적인 조인 유형으로, 두 테이블에서 조인 조건을 만족하는 레코드을 찾아 조인
+-- ② __________: 왼쪽 테이블의 모든 레코드에 대해 조인 조건을 만족하는 오른쪽 테이블의 레코드을 조인하고, 조인할 수 없는 경우 NULL 값으로 채움
+-- ③ __________: 오른쪽 테이블의 모든 레코드에 대해 조인 조건을 만족하는 왼쪽 테이블의 레코드을 조인하고, 조인할 수 없는 경우 NULL 값으로 채움
+-- ④ __________: 두 테이블 사이에서 조인이 가능한 레코드뿐만 아니라 조인 불가능한 레코드도 모두 가져오고 빈 컬럼은 NULL 값으로 채움
+-- ⑤ __________: 두 쿼리의 결과 테이블을 하나로 합침
 
+-- (ㄱ) FULL JOIN
+-- (ㄴ) INNER JOIN
+-- (ㄷ) UNION
+-- (ㄹ) RIGHT JOIN
+-- (ㅁ) LEFT JOIN
 
+-- 정답: 
 
 
 
