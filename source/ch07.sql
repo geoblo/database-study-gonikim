@@ -258,13 +258,29 @@ SELECT name, email FROM graduates; -- 졸학생
     FROM photos p
     LEFT JOIN users u ON p.user_id = u.id
 )
-UNION
+UNION -- 두 쿼리의 결과 테이블을 위아래로 합치고 중복 데이터는 제거
 (
 	SELECT *
     FROM photos p
     RIGHT JOIN users u ON p.user_id = u.id
 );
 
+-- 4. UNION ALL 연산자
+-- UNION과 UNION ALL의 차이
+-- UNION과 UNION ALL의 유일한 차이점은 "중복 처리" 여부
+-- UNION: 두 결과 집합을 합친 후, 중복된 행을 제거
+(쿼리A)
+UNION
+(쿼리B);
+-- UNION ALL: 중복 제거 과정 없이, 두 결과 집합을 그대로 모두 합침
+(쿼리A)
+UNION ALL
+(쿼리B);
+
+-- UNION과 UNION ALL 중 무엇을 쓸지는 정답이 없고 비즈니스 요구사항에 따라 다름
+-- 사용 예: '전자기기' 카테고리 상품을 한 번이라도 구매한 고객과 
+-- '도서' 카테고리 상품을 한 번이라도 구매한 고객을 대상으로 할인 쿠폰을 발송하려고 한다.
+-- 두 카테고리 모두 구매한 고객에게는 쿠폰을 중복 발송하려고 한다면 UNION ALL을 사용
 
 
 
