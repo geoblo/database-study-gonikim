@@ -13,3 +13,31 @@
 CREATE DATABASE group_analysis;
 USE group_analysis;
 
+
+
+	('male', 176.6),
+	('female', 165.5),
+	('female', 159.3),
+	('male', 172.8),
+	('female', 160.7),
+	('female', 170.2),
+	('male', 182.1);
+    
+-- 확인
+SELECT * FROM students;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
