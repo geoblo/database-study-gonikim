@@ -15,4 +15,16 @@
 
 USE market;
 
+SELECT 
+	p.name AS 상품명,
+    p.price AS 가격,
+    SUM(price * count) AS '누적 매출'
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+JOIN orders o ON od.order_id = o.id
+WHERE o.status = '배송 완료'
+GROUP BY p.id
+ORDER BY p.price
+LIMIT 4;
+
 
