@@ -133,7 +133,28 @@ GROUP BY gender;
 -- 정답: O, X, O
 
 
+/*
+	8.2 그룹화 필터링, 정렬, 조회 개수 제한
+*/
+-- 결제 테이블 생성
+CREATE TABLE payments (
+	id INT AUTO_INCREMENT,
+    amount INT, -- 결제 금액
+    ptype VARCHAR(50), -- 결제 유형
+    PRIMARY KEY (id)
+);
 
+INSERT INTO payments (amount, ptype)
+VALUES
+	(33640, 'SAMSONG CARD'),
+	(33110, 'SAMSONG CARD'),
+	(31200, 'LOTTI CARD'),
+	(69870, 'COCOA PAY'),
+	(32800, 'COCOA PAY'),
+	(42210, 'LOTTI CARD'),
+	(46060, 'LOTTI CARD'),
+	(42520, 'SAMSONG CARD'),
+	(23070, 'COCOA PAY');
 
 
 
