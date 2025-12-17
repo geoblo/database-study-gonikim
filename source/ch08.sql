@@ -172,6 +172,31 @@ HAVING 그룹_필터링_조건; -- 그룹핑된 결과에 대해 필터링하는
 
 -- 결제 유형별 평균 결제 금액이 40,000원 이상인 데이터는?
 -- Quiz: 우선 결제 유형별 평균 결제 금액 구하기
+SELECT 
+	ptype AS '결제 유형', 
+    AVG(amount) AS '평균 결제 금액'
+FROM payments
+GROUP BY ptype;
+
+-- 위 결과에 40,000원 이상인 데이터 구하기 => HAVING
+SELECT 
+	ptype AS '결제 유형', 
+    AVG(amount) AS '평균 결제 금액'
+FROM payments
+-- WHERE AVG(amount) >= 40000 -- 오류 발생: WHERE 절은 그룹화가 이루어지기 전, 개별 행 하나하나에 대해 조건을 검사하기 때문
+GROUP BY ptype
+HAVING AVG(amount) >= 40000; -- 집계 함수는 HAVING 절에서 조건을 거는 게 맞음
+
+-- (중요) SQL 작동 순서: FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> 
+
+
+
+
+
+
+
+
+
 
 
 
