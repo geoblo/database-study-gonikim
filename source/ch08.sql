@@ -509,19 +509,82 @@ SHOW TABLES;
 -- Quiz
 -- 상품 유형별 집계하기
 -- 상품(products) 테이블에서 상품 유형별 상품의 개수, 최고 가격, 최저 가격을 구하려면?
-
+SELECT 
+	product_type AS '상품 유형',
+    COUNT(*) AS '상품 개수',
+    MAX(price) AS '최고 가격',
+    MIN(price) AS '최저 가격'
+FROM products
+GROUP BY product_type;
 
 -- 사용자 주문 총액 필터링하기
 -- 사용자별 주문 총액을 구하고, 그 총액이 30,000원 이상인 주문자의 주문자명과 주문 총액?
+SELECT *
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN payments p ON o.id = p.order_id;
 
+SELECT 
+	nickname AS '주문자명',
+    SUM(amount) AS '주문 총액'
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN payments p ON o.id = p.order_id
+GROUP BY nickname -- 사용자별로 그룹화
+HAVING SUM(amount) >= 30000; -- 그룹 필터링
 
 -- 가장 많이 팔린 상품 TOP3
 -- 상품별 판매 수량을 집계했을 때, 가장 많이 팔린 상품 TOP3의 상품명과 판매수량은?
 -- 판매 수량이 동일할 때는 상품명 순으로 정렬
+SELECT *
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+-- orders 테이블에 장바구니 정보도 함께 저장되어서 이를 구분하기 위해 한번 더 JOIN
+JOIN orders o ON od.order_id = o.id 
+WHERE status = '배송 완료'; -- 배송 완료 레코드만 필터링
 
+-- 그룹화, 집계
+SELECT 
+	name AS 상품명,
+    SUM(count) AS '판매 수량'
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+JOIN orders o ON od.order_id = o.id 
+WHERE status = '배송 완료'
+GROUP BY p.id, p.name; -- 상품별 그룹화
 
-
-
+-- 정렬 + 개수 제한
+SELECT 
+	name AS 상품명,
+    SUM(count) AS '판매 수량' -- 6)
+FROM products p -- 1)
+JOIN order_details od ON p.id = od.product_id -- 2)
+JOIN orders o ON od.order_id = o.id -- 3)
+WHERE status = '배송 완료' -- 4)
+GROUP BY p.id, p.name -- 5)
+ORDER BY SUM(count) DESC, p.name ASC -- 7) 판매 수량이 동일할 때 상품명 순으로 정렬하겠다는 의미
+LIMIT 3; -- 8)
+-- Quiz: 실행 순서를 번호로 달아보기
     
-    
+-- Quiz
+-- 3. market DB에서 배송 완료된 상품별로 누적 매출 상위 3개 상품 정보를 조회하고자 한다.
+-- 다음 쿼리의 빈칸을 채워 완성하시오.
+
+-- ------------------------------
+-- 상품명              | 누적 매출
+-- ------------------------------
+-- 무항생제 특란 20구    | 28800
+-- 수제 크림 치즈 200g  | 18000
+-- 샐러드 키트 6봉      | 17800
+
+SELECT 
+	name AS '상품명',
+	SUM(① __________) AS '누적 매출'
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+JOIN orders o ON od.order_id = o.id
+			AND status = '배송 완료'
+GROUP BY name
+ORDER BY SUM(② __________) DESC
+LIMIT 3;
     
