@@ -222,6 +222,24 @@ ORDER BY 정렬_컬럼1 [ASC | DESC], 정렬_컬럼2 [ASC | DESC], ...;
 -- 정답은 '알 수 없다' 또는 '데이터베이스 마음대로' => DB에 저장된 데이터는 순서가 없는 집합(Set)
 -- ORDER BY 절이 없는 SELECT 결과의 행 순서는 SQL 표준상 보장되지 않으며, DBMS 실행 계획에 따라 달라짐
 
+-- 단일 컬럼 정렬: 결제 테이블에서 결제 금액이 높은 순서대로 조회하려면?
+SELECT 
+	ptype AS '결제 유형',
+    amount AS '결제 금액'
+FROM payments
+ORDER BY amount DESC;
+
+-- 다중 컬럼 정렬: 결제 테이블에서 결제 유형 오름차순, 결제 금액 내림차순으로 정렬하려면?
+SELECT 
+	ptype AS '결제 유형',
+    amount AS '결제 금액'
+FROM payments
+ORDER BY ptype ASC, amount DESC;
+-- ptype으로 먼저 오름차순 정렬 후 ptype이 같은 행들끼리 amount로 다시 내림차순 정렬(순서 중요)
+
+-- 실무에서는 오름차순인 경우 ASC 키워드는 대부분 생략하고 ORDER BY만 사용
+-- 내림차순의 경우 DESC를 필수로 적어야 하기 때문에 생략하면 안됨
+
 
 
 
