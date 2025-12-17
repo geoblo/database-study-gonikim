@@ -266,24 +266,96 @@ FROM 테이블명
 LIMIT N;
 
 -- 결제 금액 상위 3개 데이터만 조회하려면?
+SELECT *
+FROM payments
+ORDER BY amount DESC
+LIMIT 3;
 
+-- 상위 N개 데이터가 아닌 중간 데이터를 가져오고 싶다면?
+-- LIMIT 절에 OFFSET 키워드를 추가해 읽어 올 데이터의 시작 지점을 조정할 수 있음
 
+-- 형식
+SELECT 컬럼1, 컬럼2, ...
+FROM 테이블명
+LIMIT N OFFSET M; -- N: 가져올 레코드의 수, M: 건너뛸 레코드의 수
+-- 또는
+-- LIMIT M, N;
 
+-- 결제 금액 4등~6등까지 조회
+SELECT *
+FROM payments
+ORDER BY amount DESC
+LIMIT 3 OFFSET 3; -- 처음 3개 행은 건너뛰고 3개 행만 가져옴
 
+-- Tip: LIMIT 활용
+-- 페이지네이션(Pagination) 구현할 때 SQL에서 가장 기본적으로 사용
+-- 예: 한 페이지당 10개씩 보여줄 경우
+-- Quiz: products 테이블
+-- 1페이지
+SELECT *
+FROM products
+LIMIT 0, 10;
 
+-- 2페이지
+SELECT *
+FROM products
+LIMIT 10, 10;
 
+-- 3페이지
+SELECT *
+FROM products
+LIMIT 20, 10;
 
+-- (하드코딩X) OFFSET 계산 방법(공식화)
+-- OFFSET = (현재 페이지 번호 - 1) * 페이지당 개수
+-- 1페이지: OFFSET = (1 - 1) * 10 = 0
+-- 2페이지: OFFSET = (2 - 1) * 10 = 10
+-- 3페이지: OFFSET = (3 - 1) * 10 = 20
 
+-- (중요) 정렬은 반드시 함께 쓰자!
+-- 정렬 없이 LIMIT만 쓰면 페이지가 뒤죽박죽 될 수 있음
+SELECT *
+FROM products
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 20;
 
+-- (참고) 성능 주의사항
+-- OFFSET이 커질수록 성능이 떨어짐(건너뛸 데이터를 계속 읽기 때문)
+-- 대규모 데이터에서는 커서 기반 / keyset pagination을 고려하기도 함
+-- "페이지 번호"가 아니라 "마지막으로 본 기준값"을 기준으로 다음 데이터를 조회하는 방식
+-- OFFSET 방식: 페이지 3 -> OFFSET 20
+-- keyset 방식: 마지막으로 본 created_at = '2024-12-01 10:00:00'
+SELECT *
+FROM products
+WHERE created_at < '2024-12-01 10:00:00'
+ORDER BY created_at DESC
+LIMIT 10;
+-- 정리: OFFSET 방식은 페이지가 깊어질수록 성능이 급격히 떨어지기 때문에,
+-- 대규모 데이터에서는 마지막 조회 기준값을 사용하는 keyset pagination 적용을 고려
 
+-- (참고) 보통 OFFSET 방식 + 기간 제한은 성능 개선 효과가 있음
 
+-- Quiz
+-- 2. 다음은 payments 테이블에서 ptype(결제 유형)별로 결제 횟수와 평균 결제 금액을 구하는 쿼리이다.
+-- 빈칸을 순서대로 채워 이를 완성하시오.
 
+-- 그룹화와 정렬
+-- -------------------------------------
+-- 결제 유형      | 결제 횟수  | 평균 결제 금액
+-- -------------------------------------
+-- COCOA PAY    | 3        | 41913.3333
+-- LOTTI CARD   | 3        | 39823.3333
+-- SAMSONG CARD | 3        | 36423.3333
 
+SELECT 
+	ptype AS '결제 유형',
+	① __________ AS '결제 횟수',
+	AVG(amount) AS '평균 결제 금액'
+FROM payments
+GROUP BY ② __________
+ORDER BY COUNT(*) DESC, ③ __________ DESC;
 
-
-
-
-
+-- 정답: 
 
 
 
