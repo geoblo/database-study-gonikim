@@ -391,6 +391,13 @@ USE market;
 
 -- Quiz: 테이블 생성 및 관계 설정
 
+-- users 테이블 생성
+CREATE TABLE users (
+	id INTEGER AUTO_INCREMENT, 		-- 아이디(자동으로 1씩 증가)
+	email VARCHAR(255) UNIQUE, 		-- 이메일(고유한 값만 허용)
+	nickname VARCHAR(255) UNIQUE, 	-- 닉네임(고유한 값만 허용)
+	PRIMARY KEY (id) 				-- 기본키 지정: id
+);
 
 -- users 데이터 삽입
 INSERT INTO users (email, nickname)
@@ -398,9 +405,16 @@ VALUES
 	('sehongpark@cloudstudying.kr', '홍팍'),
 	('kuma@cloudstudying.kr', '쿠마'),
 	('hawk@cloudstudying.kr', '호크');
-    
-    
-    
+     
+-- orders 테이블 생성
+CREATE TABLE orders (
+	id INTEGER AUTO_INCREMENT, 	-- 아이디(자동으로 1씩 증가)
+	status VARCHAR(50), 		-- 주문 상태
+	created_at DATETIME, 		-- 주문 일시
+	user_id INTEGER, 			-- 사용자 아이디
+	PRIMARY KEY (id), 			-- 기본키 지정: id
+	FOREIGN KEY (user_id) REFERENCES users(id) -- 외래키 지정: user_id
+);
     
 -- orders 데이터 삽입
 INSERT INTO orders (status, created_at, user_id)
@@ -414,7 +428,15 @@ VALUES
 	('배송 완료', '2025-01-06 15:45:51', 2),
 	('장바구니', '2025-03-06 14:54:23', 1);
 
-
+-- payments 테이블 생성
+CREATE TABLE payments (
+	id INTEGER AUTO_INCREMENT, 	-- 아이디(자동으로 1씩 증가)
+	amount INTEGER, 			-- 결제 금액
+	payment_type VARCHAR(50), 	-- 결제 유형
+	order_id INTEGER UNIQUE, 	-- 주문 아이디(UNIQUE를 쓰면 1:1 강제하는 효과)
+	PRIMARY KEY (id), 			-- 기본키 지정: id
+	FOREIGN KEY (order_id) REFERENCES orders(id) -- 외래키 지정: order_id
+);
 
 -- payments 데이터 삽입
 INSERT INTO payments (amount, payment_type, order_id)
@@ -427,7 +449,14 @@ VALUES
 	(5910, 'LOTTI CARD', 6),
 	(17300, 'LOTTI CARD', 7);
 
-
+-- products 테이블 생성
+CREATE TABLE products (
+	id INTEGER AUTO_INCREMENT, 	-- 아이디(자동으로 1씩 증가)
+	name VARCHAR(100), 			-- 상품명
+	price INTEGER, 				-- 가격
+	product_type VARCHAR(50), 	-- 상품 유형
+	PRIMARY KEY (id) 			-- 기본키 지정: id
+);
 
 -- products 데이터 삽입
 INSERT INTO products (name, price, product_type)
@@ -443,7 +472,16 @@ VALUES
 	('수제 크림 치즈 200g', 9000, '냉장 식품'),
 	('플레인 베이글', 1300, '냉장 식품');
     
-    
+-- order_details 테이블 생성
+CREATE TABLE order_details (
+	id INTEGER AUTO_INCREMENT, 	-- 아이디(자동으로 1씩 증가)
+	order_id INTEGER, 			-- 주문 아이디
+	product_id INTEGER, 		-- 상품 아이디
+	count INTEGER, 				-- 주문 수량
+	PRIMARY KEY (id), 			-- 기본키 지정: id
+	FOREIGN KEY (order_id) REFERENCES orders(id), 	 -- 외래키 지정: order_id
+	FOREIGN KEY (product_id) REFERENCES products(id) -- 외래키 지정: product_id
+);
     
 -- order_details 데이터 삽입
 INSERT INTO order_details (order_id, product_id, count)
@@ -463,13 +501,27 @@ VALUES
 	(7, 6, 1),
 	(8, 6, 3);
     
-    
-    
 -- 확인
 -- SHOW DATABASES;
 SELECT DATABASE();
 SHOW TABLES;    
-    
+
+-- Quiz
+-- 상품 유형별 집계하기
+-- 상품(products) 테이블에서 상품 유형별 상품의 개수, 최고 가격, 최저 가격을 구하려면?
+
+
+-- 사용자 주문 총액 필터링하기
+-- 사용자별 주문 총액을 구하고, 그 총액이 30,000원 이상인 주문자의 주문자명과 주문 총액?
+
+
+-- 가장 많이 팔린 상품 TOP3
+-- 상품별 판매 수량을 집계했을 때, 가장 많이 팔린 상품 TOP3의 상품명과 판매수량은?
+-- 판매 수량이 동일할 때는 상품명 순으로 정렬
+
+
+
+
     
     
     
