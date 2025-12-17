@@ -240,6 +240,30 @@ ORDER BY ptype ASC, amount DESC;
 -- 실무에서는 오름차순인 경우 ASC 키워드는 대부분 생략하고 ORDER BY만 사용
 -- 내림차순의 경우 DESC를 필수로 적어야 하기 때문에 생략하면 안됨
 
+-- (참고) MySQL의 NULL 정렬 규칙
+-- MySQL은 NULL을 가장 작은 값으로 취급함
+-- ORDER BY column ASC(오름차순): NULL 값이 가장 먼저 나옴
+-- ORDER BY column DESC(내림차순): NULL 값이 가장 나중에 나옴
+-- 이것은 데이터베이스 시스템마다 정책이 다를 수 있음(예: Oracle은 NULL을 가장 큰 값으로 취급)
+INSERT INTO payments (amount, ptype)
+VALUES
+	(NULL, 'SAMSONG CARD'),
+    (NULL, 'COCOA PAY');
+    
+SELECT 
+	ptype AS '결제 유형',
+    amount AS '결제 금액'
+FROM payments
+ORDER BY amount;
+
+-- 3. 조회 개수 제한(LIMIT, OFFSET)
+
+
+
+
+
+
+
 
 
 
