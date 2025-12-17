@@ -187,9 +187,18 @@ FROM payments
 GROUP BY ptype
 HAVING AVG(amount) >= 40000; -- 집계 함수는 HAVING 절에서 조건을 거는 게 맞음
 
--- (중요) SQL 작동 순서: FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> 
+-- (중요) SQL 작동 순서: FROM/JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT/OFFSET
 
-
+-- (참고) MySQL에서는 HAVING 절에서 SELECT 절의 별칭을 쓸 수 있다.(MySQL 허용)
+-- 표준 SQL 문법에 따르면 HAVING 절은 SELECT 절보다 먼저 처리된다.
+-- 따라서 SELECT 절에서 지정한 별칭(alias)을 HAVING 절에서 사용하는 것은 원칙적으로 불가능
+-- 집계 함수 표현식을 직접 사용하는 것이 안전하고 호환성이 높은 방법
+SELECT 
+	ptype AS '결제 유형', 
+    AVG(amount) AS '평균 결제 금액'
+FROM payments
+GROUP BY ptype
+HAVING `평균 결제 금액` >= 40000; -- 주의! ''로 묶으면 문자 데이터로 인식
 
 
 
