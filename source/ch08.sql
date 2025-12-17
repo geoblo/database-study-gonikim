@@ -257,7 +257,15 @@ FROM payments
 ORDER BY amount;
 
 -- 3. 조회 개수 제한(LIMIT, OFFSET)
+-- 조회 결과 중 상위 N개의 레코드만을 조회하는 명령
+-- LIMIT 절을 이용해 반환하려는 레코드의 개수를 정의
 
+-- 형식
+SELECT 컬럼1, 컬럼2, ...
+FROM 테이블명
+LIMIT N;
+
+-- 결제 금액 상위 3개 데이터만 조회하려면?
 
 
 
