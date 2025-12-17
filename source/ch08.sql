@@ -587,4 +587,14 @@ JOIN orders o ON od.order_id = o.id
 GROUP BY name
 ORDER BY SUM(② __________) DESC
 LIMIT 3;
-    
+
+SELECT 
+	name AS '상품명',
+	SUM(price * count) AS '누적 매출'
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+JOIN orders o ON od.order_id = o.id
+			AND status = '배송 완료'
+GROUP BY name
+ORDER BY SUM(price * count) DESC
+LIMIT 3;
