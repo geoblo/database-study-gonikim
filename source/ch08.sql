@@ -356,14 +356,120 @@ GROUP BY ② __________
 ORDER BY COUNT(*) DESC, ③ __________ DESC;
 
 -- 정답: 
+SELECT 
+	ptype AS '결제 유형',
+	COUNT(*) AS '결제 횟수',
+	AVG(amount) AS '평균 결제 금액'
+FROM payments
+GROUP BY ptype
+ORDER BY COUNT(*) DESC, AVG(amount) DESC;
+
+
+/*
+	8.3 그룹화 분석 실습: 마켓 DB
+*/
+-- 마켓 DB를 활용하여 그룹화, 그룹화 필터링, 정렬, 조회 개수 제한을 연습!
+
+-- https://www.notion.so/2c9ef6e7ff1c80fd97c8d3c5276ab142
+-- ch08_09_market_db 참고
+-- ch08_09_market_erd 참고
+
+-- 마켓 DB 데이터 셋
+-- • users(사용자): 사용자의 id(아이디), email(이메일), nickname(닉네임)을 저장합니다.
+-- • orders(주문): 주문의 id(아이디), status(주문 상태), created_at(주문 생성 시각)을 저장합니다.
+-- • payments(결제): 결제의 id(아이디), amount(결제 금액), payment_type(결제 유형)을 저장합니다.
+-- • products(상품): 상품의 id(아이디), name(상품명), price(가격), product_type(상품 유형)을 저장합니다.
+-- • order_details(주문 상세): 주문 상세의 id(아이디), count(판매 수량)를 저장합니다.
+
+-- 제약 조건
+-- 모든 id 컬럼은 AUTO_INCREMENT
+-- users 테이블의 email, nickname은 고유한 값만 허용
+
+-- market DB 생성 및 진입
+CREATE DATABASE market;
+USE market;
+
+-- Quiz: 테이블 생성 및 관계 설정
+
+
+-- users 데이터 삽입
+INSERT INTO users (email, nickname)
+VALUES
+	('sehongpark@cloudstudying.kr', '홍팍'),
+	('kuma@cloudstudying.kr', '쿠마'),
+	('hawk@cloudstudying.kr', '호크');
+    
+    
+    
+    
+-- orders 데이터 삽입
+INSERT INTO orders (status, created_at, user_id)
+VALUES
+	('배송 완료', '2024-11-12 11:07:12', 1),
+	('배송 완료', '2024-11-17 22:14:54', 1),
+	('배송 완료', '2024-11-24 19:13:46', 2),
+	('배송 완료', '2024-11-29 23:57:29', 3),
+	('배송 완료', '2024-12-06 22:25:13', 3),
+	('배송 완료', '2025-01-02 13:04:25', 2),
+	('배송 완료', '2025-01-06 15:45:51', 2),
+	('장바구니', '2025-03-06 14:54:23', 1);
 
 
 
+-- payments 데이터 삽입
+INSERT INTO payments (amount, payment_type, order_id)
+VALUES
+	(9740, 'SAMSONG CARD', 1),
+	(13800, 'SAMSONG CARD', 2),
+	(32200, 'LOTTI CARD', 3),
+	(28420, 'COCOA PAY', 4),
+	(18000, 'COCOA PAY', 5),
+	(5910, 'LOTTI CARD', 6),
+	(17300, 'LOTTI CARD', 7);
 
 
 
-
-
-
-
-
+-- products 데이터 삽입
+INSERT INTO products (name, price, product_type)
+VALUES
+	('우유 900ml', 1970, '냉장 식품'),
+	('참치 마요 120g', 4400, '냉장 식품'),
+	('달걀 감자 샐러드 500g', 6900, '냉장 식품'),
+	('달걀 듬뿍 샐러드 500g', 6900, '냉장 식품'),
+	('크림 치즈', 2180, '냉장 식품'),
+	('우유 식빵', 2900, '상온 식품'),
+	('샐러드 키트 6봉', 8900, '냉장 식품'),
+	('무항생제 특란 20구', 7200, '냉장 식품'),
+	('수제 크림 치즈 200g', 9000, '냉장 식품'),
+	('플레인 베이글', 1300, '냉장 식품');
+    
+    
+    
+-- order_details 데이터 삽입
+INSERT INTO order_details (order_id, product_id, count)
+VALUES
+	(1, 1, 2),
+	(1, 6, 2),
+	(2, 3, 1),
+	(2, 4, 1),
+	(3, 7, 2),
+	(3, 8, 2),
+	(4, 2, 3),
+	(4, 5, 4),
+	(4, 10, 5),
+	(5, 9, 2),
+	(6, 1, 3),
+	(7, 8, 2),
+	(7, 6, 1),
+	(8, 6, 3);
+    
+    
+    
+-- 확인
+-- SHOW DATABASES;
+SELECT DATABASE();
+SHOW TABLES;    
+    
+    
+    
+    
