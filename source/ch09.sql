@@ -208,13 +208,59 @@ JOIN order_details od ON p.id = od.product_id
 GROUP BY p.id, p.name; -- 이식성을 고려한 권장 코드: 명시적으로 GROUP BY에 포함
 
 
+-- 4. WHERE 절에서의 서브쿼리
+-- 1x1, Nx1 반환하는 서브쿼리만 사용 가능(필터링 조건으로 값 또는 값의 목록을 사용하기 때문)
+
+-- 평균 가격보다 비싼 상품을 조회하려면?
+SELECT *
+FROM products
+WHERE price > (평균가격);
+-- 평균 가격을 서브쿼리로 구해서 넣으면 됨
+
+SELECT *
+FROM products
+WHERE price > (
+	-- 서브쿼리: 평균가격
+    SELECT AVG(price)
+    FROM products
+);
 
 
+-- 5. HAVING 절에서의 서브쿼리
+-- 1x1, Nx1 반환하는 서브쿼리만 사용 가능(필터링 조건으로 값 또는 값의 목록을 사용하기 때문)
 
+-- 크림 치즈보다 매출이 높은 상품은? (장바구니 상품 포함)
+-- 상품x주문상세 조인해서 -> 상품명으로 그룹화 -> 상품별로 매출을 집계
+-- 메인쿼리: 전체 상품의 매출을 조회
+SELECT 
+	p.name AS 상품명,
+    SUM(price * count) AS 매출
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+GROUP BY p.name;
 
+-- => 크림 치즈보다 매출이 높은 상품 조회로 변경
+SELECT 
+	p.name AS 상품명,
+    SUM(price * count) AS 매출
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+GROUP BY p.name
+HAVING SUM(price * count) > (
+	-- 서브쿼리: 크림 치즈의 매출(=8720)
+    SELECT SUM(price * count)
+	FROM products p
+	JOIN order_details od ON p.id = od.product_id
+	WHERE p.name = '크림 치즈'
+);
 
+-- Quiz
+-- 2. 다음 설명이 맞으면 O, 틀리면 X를 표시하세요.
+-- ① SELECT 절의 서브쿼리는 단일 값만 반환해야 한다. (  )
+-- ② FROM 절과 JOIN 절의 서브쿼리는 별칭을 지정해야 한다. (  )
+-- ③ WHERE 절과 HAVING 절의 서브쿼리는 단일 값 또는 다중 행의 단일 컬럼을 반환할 수 있다. (  )
 
-
+-- 정답: 
 
 
 
