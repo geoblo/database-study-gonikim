@@ -279,10 +279,42 @@ HAVING SUM(price * count) > (
 
 -- IN 연산자 사용 예1: 값 목록을 입력받는 경우
 -- Quiz: 상품명이 '우유 식빵', '크림 치즈'인 대상의 id 목록은?
+SELECT id
+FROM products
+WHERE name IN ('우유 식빵', '크림 치즈');
+
+-- IN 연산자 사용 예2: 서브쿼리를 입력받는 경우
+-- '우유 식빵', '크림 치즈'를 포함하는 주문의 상세 내역
+SELECT *
+FROM order_details
+WHERE product_id IN (
+	-- 서브쿼리: 우유 식빵과 크림 치즈의 아이디를 반환(Nx1)
+    SELECT id
+	FROM products
+	WHERE name IN ('우유 식빵', '크림 치즈')
+);
+
+-- IN 연산자 사용 예3: 조인과 IN 연산자
+-- Quiz: '우유 식빵', '크림 치즈'를 주문한 사용자 아이디와 닉네임은?
+SELECT DISTINCT u.id, u.nickname
+FROM users u
+JOIN orders o ON u.id = o.user_id
+JOIN order_details od ON o.id = od.order_id
+JOIN products p ON od.product_id = p.id
+WHERE p.name IN ('우유 식빵', '크림 치즈');
 
 
+-- 2. ANY 연산자
+-- 지정된 집합의 모든 요소와 비교 연산(>, < 등)을 수행하여 하나라도 만족하는 대상을 찾음
 
+-- 형식
+컬럼명 비교연산자 ANY (다중 행의 단일 컬럼을 반환하는 서브쿼리);
 
+-- 3. ALL 연산자
+-- 지정된 집합의 모든 요소와 비교 연산(>, < 등)을 수행하여 모두를 만족하는 대상을 찾음
+
+-- 형식
+컬럼명 비교연산자 ALL (다중 행의 단일 컬럼을 반환하는 서브쿼리);
 
 
 
