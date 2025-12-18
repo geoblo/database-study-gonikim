@@ -407,8 +407,28 @@ WHERE EXISTS (
 -- 특히 메인쿼리 테이블의 데이터 양이 많을 경우 사용 지양
 -- 메인쿼리의 행 수만큼 서브쿼리가 반복 실행되기 때문
 
+-- 또 다른 방법1
+SELECT DISTINCT user_id
+FROM orders;
+
+SELECT *
+FROM users
+WHERE id IN (
+	SELECT DISTINCT user_id
+	FROM orders -- 서브쿼리의 결과값이 많아질수록 성능 저하
+);
+
+-- 또 다른 방법2(권장)
+SELECT DISTINCT u.*
+FROM users u
+JOIN orders o ON u.id = o.user_id;
+-- 상관 서브쿼리보다 JOIN이 더 효율적
 
 
+-- (정리) 실무에서는 서브쿼리 vs JOIN
+-- 일반적으로 데이터베이스는 JOIN이 서브쿼리보다 성능이 더 좋거나 최소한 동일
+-- 1) JOIN을 우선적으로 고려
+-- 2) JOIN으로 표현하기 너무 복잡하거나, 서브쿼리의 가독성이 훨씬 좋다면 서브쿼리를 사용
 
 
 
