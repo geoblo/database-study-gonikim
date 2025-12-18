@@ -310,16 +310,58 @@ WHERE p.name IN ('우유 식빵', '크림 치즈');
 -- 형식
 컬럼명 비교연산자 ANY (다중 행의 단일 컬럼을 반환하는 서브쿼리);
 
+-- '우유 식빵'이나 '플레인 베이글'보다 저렴한 상품 목록은?
+-- 메인쿼리
+SELECT name AS 이름, price AS 가격
+FROM products
+WHERE price < ANY (
+	-- 서브쿼리: 우유 식빵과 플레인 베이글의 가격 조회
+    SELECT price
+    FROM products
+    WHERE name IN ('우유 식빵', '플레인 베이글') -- 2900, 1300
+); -- 최대값보다 작으면 참, 결과적으로 2900원 보다 작은 모든 상품 조회
+
+-- 집계 함수 사용으로 대체
+SELECT name AS 이름, price AS 가격
+FROM products
+WHERE price < (
+	-- 서브쿼리: 우유 식빵과 플레인 베이글의 가격 조회
+    SELECT MAX(price)
+    FROM products
+    WHERE name IN ('우유 식빵', '플레인 베이글') -- 2900
+);
+
+
 -- 3. ALL 연산자
 -- 지정된 집합의 모든 요소와 비교 연산(>, < 등)을 수행하여 모두를 만족하는 대상을 찾음
 
 -- 형식
 컬럼명 비교연산자 ALL (다중 행의 단일 컬럼을 반환하는 서브쿼리);
 
+-- '우유 식빵'과 '플레인 베이글'보다 비싼 상품 목록은?
+-- 메인쿼리
+SELECT name AS 이름, price AS 가격
+FROM products
+WHERE price > ALL (
+	-- 서브쿼리: 우유 식빵과 플레인 베이글의 가격 조회
+    SELECT price
+    FROM products
+    WHERE name IN ('우유 식빵', '플레인 베이글') -- 2900, 1300
+); -- 최대값보다 커야 참, 결과적으로 2900원 보다 큰 모든 상품 조회
 
+-- 집계 함수 사용으로 대체
+SELECT name AS 이름, price AS 가격
+FROM products
+WHERE price > (
+	-- 서브쿼리: 우유 식빵과 플레인 베이글의 가격 조회
+    SELECT MAX(price)
+    FROM products
+    WHERE name IN ('우유 식빵', '플레인 베이글') -- 2900
+);
 
-
-
+-- 정리: 두 쿼리 모두 ANY, ALL을 사용했을 때와 완전히 동일한 결과를 반환
+-- ANY, ALL 보다는 집계 함수를 사용한 코드가 더 직관적이고 이해하기 쉬움
+-- 그래서 ANY, ALL 사용 빈도는 IN 이나 집계 함수에 비해 낮은 편
 
 
 
