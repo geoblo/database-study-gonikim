@@ -172,11 +172,40 @@ FROM (
 ) AS sub; -- 별칭 필수(AS는 생략 가능)
 
 
+-- 3. JOIN 절에서의 서브쿼리
+-- NxM 반환하는 행과 컬럼의 개수에 제한이 없음
+-- 실행 결과가 마치 하나의 독릭된 가상 테이블(View)처럼 사용되기 때문에 테이블 서브쿼리라고 부름
+-- 단, 서브쿼리에 별칭 지정 필수
 
+-- 상품별 주문 개수를 '배송 완료'와 '장바구니'에 상관없이 상품명과 주문 개수를 조회한다면?
+-- 일단 먼저 상품 아이디별 주문 개수 집계 구하기
+SELECT 
+	product_id,
+    SUM(count) AS total_count
+FROM order_details
+GROUP BY product_id;
 
+-- 메인쿼리: 상품명을 포함한 상품별 주문 개수 집계
+SELECT 
+	p.name AS 상품명,
+    sub.total_count AS '주문 개수' -- 서브쿼리에서 구한 데이터를 가져다 씀
+FROM products p
+JOIN (
+	-- 서브쿼리
+    SELECT 
+		product_id,
+		SUM(count) AS total_count
+	FROM order_details
+	GROUP BY product_id
+) AS sub ON p.id = sub.product_id;
 
-
-
+-- 또 다른 방법: 일단 필요한 테이블을 붙여놓고(JOIN) 그룹화 및 집계
+SELECT 
+	p.name AS 상품명,
+    SUM(count) AS '주문 개수'
+FROM products p
+JOIN order_details od ON p.id = od.product_id
+GROUP BY p.id, p.name; -- 이식성을 고려한 권장 코드: 명시적으로 GROUP BY에 포함
 
 
 
