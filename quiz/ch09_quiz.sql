@@ -224,6 +224,8 @@ FROM (
   JOIN employees e ON d.id = e.department_id
 ) AS sub -- 별칭 필수
 GROUP BY department_name;
+-- 이 쿼리는 서브쿼리가 전혀 필요 없는 상황이고, 오히려 불필요하게 한 단계를 더 거친 형태
+-- 서브쿼리를 쓰지 말고 부서로 그룹화하고 카운트 하면 끝날 일(아래 참고)
 
 -- 다른 방법: JOIN을 이용한 방법
 SELECT d.name AS 부서명, COUNT(*) AS 직원수
