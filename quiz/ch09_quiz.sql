@@ -8,7 +8,7 @@
 -- ③ 특정 조건을 기준으로 데이터를 필터링하는 명령
 -- ④ 쿼리 실행 결과를 정렬하는 방식
 
--- 정답: 
+-- 정답: 1
 
 
 -- 문제 2
@@ -19,7 +19,7 @@
 -- ③ JOIN 절
 -- ④ LIMIT 절
 
--- 정답: 
+-- 정답: 4
 
 
 -- 문제 3
@@ -30,7 +30,7 @@
 -- ③ JOIN은 두 테이블 간의 모든 데이터를 결합하고, 서브쿼리는 특정 데이터를 필터링한다.
 -- ④ JOIN은 임시 테이블을 생성하고, 서브쿼리는 모든 데이터를 반환한다.
 
--- 정답: 
+-- 정답: 2
 
 
 -- 문제 4
@@ -48,7 +48,8 @@ WHERE id IN (
 -- ③ 대출 기록에서 조회된 회원 ID
 -- ④ 대출 기록에서 조회된 도서 ID
 
--- 정답: 
+-- 정답: 3
+-- 메인쿼리: 한 번이라도 도서를 대출한 회원들의 이름 목록
 
 
 -- 문제 5
@@ -60,7 +61,7 @@ WHERE id IN (
 -- ④ HAVING 절: 그룹화된 데이터의 집계 결과를 조건으로 제한한다.
 -- ⑤ 모두 맞다.
 
--- 정답: 
+-- 정답: 5
 
 
 -- 2. 서브쿼리 연습 문제
@@ -173,42 +174,130 @@ VALUES
 -- 각 직원의 이름과 참여 중인 프로젝트 수를 조회하세요.
 
 -- 정답:
+SELECT 
+	name,
+	(
+		SELECT COUNT(*)
+		FROM employee_projects ep
+		WHERE ep.employee_id = e.id -- 해당 직원의 참여 프로젝트 수만 세고 있음
+	) AS project_count
+FROM employees e;
 
+-- 다른 방법: JOIN을 이용한 방법
+SELECT 
+  name,
+  COUNT(project_id) AS project_count
+FROM employees e
+LEFT JOIN employee_projects ep ON e.id = ep.employee_id
+GROUP BY e.id, e.name; -- 직원별로 그룹화(중복 이름[동명이인]이 있을 수도 있으니 id까지 그룹으로 묶어서)
+-- INNER JOIN을 쓰면 프로젝트에 참여한 직원만 나옴
+-- LEFT JOIN을 사용하는 이유는 프로젝트에 참여하지 않은 직원도 0건으로 표시하기 위해
 
 
 -- 문제 2: WHERE 절에서의 서브쿼리
 -- 특정 부서(예: IT 부서)의 직원 이름을 조회하세요.
 
 -- 정답: 
+SELECT name
+FROM employees
+WHERE department_id = (
+	SELECT id
+	FROM departments
+	WHERE name = 'IT'
+);
 
+-- 다른 방법: JOIN을 이용한 방법
+SELECT e.name
+FROM employees e
+JOIN departments d ON e.department_id = d.id
+WHERE d.name = 'IT';
 
 
 -- 문제 3: FROM 절에서의 서브쿼리
 -- 부서별 직원 수를 조회하세요.
 
 -- 정답: 
+SELECT department_name, COUNT(*) AS employee_count
+FROM (
+  SELECT d.name AS department_name, e.id
+  FROM departments d
+  JOIN employees e ON d.id = e.department_id
+) AS sub -- 별칭 필수
+GROUP BY department_name;
 
+-- 다른 방법: JOIN을 이용한 방법
+SELECT d.name AS 부서명, COUNT(*) AS 직원수
+FROM departments d
+JOIN employees e ON d.id = e.department_id -- 이렇게 하면 직원이 있는 부서만
+GROUP BY d.name; -- 부서로 그룹화
+
+SELECT d.name AS 부서명, COUNT(department_id) AS 직원수 -- 직원이 없는 부서는 0명으로 표시
+FROM departments d
+LEFT JOIN employees e ON d.id = e.department_id -- 이렇게 하면 직원이 없는 부서도
+GROUP BY d.name; -- 부서로 그룹화
 
 
 -- 문제 4: JOIN 절에서의 서브쿼리
 -- 가장 높은 급여를 받은 직원의 이름과 급여를 조회하세요.
 
 -- 정답: 
+SELECT name, salary
+FROM employees e
+JOIN (
+    SELECT MAX(salary) AS max_salary
+    FROM employees
+) AS max_sal ON e.salary = max_sal.max_salary;
+-- JOIN은 두 테이블 간 관계가 없어도 가능
+-- 조인의 핵심 원리는 '두 테이블의 특정 열(column)의 값이 같으면' 연결
 
+-- 다른 방법: WHERE 절에서 서브쿼리
+-- 해석에 따라 아래와 같이 2가지로 구분
+-- employees 기준: 현재 급여가 가장 높은 직원
+SELECT name, salary
+FROM employees
+WHERE salary = (
+	SELECT MAX(salary)
+	FROM employees
+);
+
+-- salary_records 기준: 급여 이력 중 최고 금액을 받은 직원
+SELECT DISTINCT name, amount
+FROM employees e
+JOIN salary_records sr ON sr.employee_id = e.id 
+WHERE amount = (
+	SELECT MAX(amount)
+	FROM salary_records
+);
 
 
 -- 문제 5: HAVING 절에서의 서브쿼리
 -- 부서별 평균 급여가 전체 평균 급여 이상인 부서명을 조회하세요.
 
 -- 정답:
-
+SELECT d.name AS 부서명, AVG(e.salary) AS '평균 급여'
+FROM departments d
+JOIN employees e ON e.department_id = d.id
+GROUP BY d.name -- 부서별
+HAVING AVG(e.salary) >= ( -- 부서별 평균 급여
+    -- 전체 평균 급여
+		SELECT AVG(salary) 
+		FROM employees
+);
 
 
 -- 문제 6: 복합 조건을 조합한 서브쿼리
 -- 가장 많은 직원이 참여한 프로젝트명을 조회하세요.
 
 -- 정답:
-
-
+SELECT name
+FROM projects
+WHERE id = (
+		-- 가장 많은 직원이 참여한 프로젝트 id
+    SELECT project_id
+    FROM employee_projects
+    GROUP BY project_id -- 프로젝트별
+    ORDER BY COUNT(*) DESC -- 참여 직원 수로 내림차순 정렬 후
+    LIMIT 1 -- 가장 참여자가 많은 프로젝트 하나를 선택
+);
 
 
