@@ -143,6 +143,69 @@ FROM payments;
 -- Error Code: 1242. Subquery returns more than 1 row
 
 
+-- 2. FROM 절에서의 서브쿼리
+-- NxM 반환하는 행과 컬럼의 개수에 제한이 없음
+-- 실행 결과가 마치 하나의 독릭된 가상 테이블(View)처럼 사용되기 때문에 테이블 서브쿼리라고 부름
+-- 단, 서브쿼리에 별칭 지정 필수
+
+-- 1회 주문 시 평균 상품 개수는? (장바구니 상품 포함)
+-- 일단 먼저 1회 주문 당 상품 개수 집계 구하기
+-- 1단계: 주문별(order_id)로 그룹화 -> count 집계: SUM()
+-- 2단계: 재집계: AVG()
+SELECT 
+	order_id,
+    SUM(count) AS total_count
+FROM order_details
+GROUP BY order_id; -- 서브쿼리로 사용(테이블 서브쿼리라고 부름)
+
+-- 메인쿼리: 1회 주문 시 평균 상품 개수 집계
+SELECT AVG(sub.total_count) -- 별칭으로 접근(권장)
+-- SELECT AVG(sub.`SUM(count)`) -- 접근 가능(비권장)
+FROM (
+	-- 서브쿼리
+    SELECT 
+		order_id,
+		SUM(count) AS total_count -- 외부 쿼리에서 집계 결과를 참조하기 위해 별칭 사용(가독성 + 호환성)
+        -- SUM(count) -- SUM(count)라는 컬럼명 자동 생성
+	FROM order_details
+	GROUP BY order_id
+) AS sub; -- 별칭 필수(AS는 생략 가능)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
