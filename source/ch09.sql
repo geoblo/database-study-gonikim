@@ -106,6 +106,45 @@ WHERE 컬럼명 연산자 (
 -- 정답: O, O, X
 
 
+/*
+	9.2 다양한 위치에서의 서브쿼리
+*/
+-- 1. SELECT 절에서의 서브쿼리
+-- 1x1 단일값만 반환하는 서브쿼리(스칼라 서브쿼리)만 사용 가능
+-- 이유? 여러 행 또는 여러 컬럼을 반환하면 어떤 값을 선택해야 할 지 몰라 에러 발생
+
+-- 모든 결제 정보에 대한 평균 결제 금액과의 차이는?
+SELECT 
+	payment_type AS '결제 유형',
+    amount AS '결제 금액',
+    amount - (평균결제금액) AS '평균 결제 금액과의 차이'
+FROM payments;
+
+-- 평균 결제 금액
+SELECT AVG(amount)
+FROM payments;
+
+-- () 괄호 안에 서브쿼리 넣기
+SELECT 
+	payment_type AS '결제 유형',
+    amount AS '결제 금액',
+    amount - (SELECT AVG(amount) FROM payments) AS '평균 결제 금액과의 차이'
+FROM payments;
+
+-- 잘못된 사용 예
+-- SELECT에 사용하는 서브쿼리는 스칼라 서브쿼리만 가능
+SELECT 
+	payment_type AS '결제 유형',
+    amount AS '결제 금액',
+    -- amount - (SELECT AVG(amount), '123' FROM payments) AS '평균 결제 금액과의 차이' -- 다중 컬럼 서브쿼리
+    amount - (SELECT amount FROM payments) AS '평균 결제 금액과의 차이' -- 다중 행 서브쿼리
+FROM payments;
+-- Error Code: 1241. Operand should contain 1 column(s)
+-- Error Code: 1242. Subquery returns more than 1 row
+
+
+
+
 
 
 
