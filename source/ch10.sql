@@ -260,10 +260,10 @@ CREATE TABLE orders (
 -- 사용자는 한 번에 여러 상품을 주문할 수 있고, 여러 번에 걸쳐 주문할 수도 있습니다.
 -- 주문이 들어오면 주문 시간과 상품을 기록으로 남기고, 주문이 결제되면 결제 정보도 기록으로 남깁니다.
 
+-- draw.io(https://app.diagrams.net/)에 실습
+
 -- 1. 개념적 데이터 모델링
 -- 데이터베이스 전문가 뿐만 아니라 비즈니스 담당자, 최종 사용자 등 누가 보더라도 쉽게 이해할 수 있게 작성
-
--- draw.io(https://app.diagrams.net/)에 실습
 
 -- 1) 요구사항 분석을 통한 엔티티 선정
 -- 사용자, 주문, 상품, 결제
@@ -321,7 +321,7 @@ CREATE TABLE orders (
 -- 인덱스(색인)는 두꺼운 책에 끼워 둔 책갈피처럼 데이터를 빠르게 검색할 수 있는 경로를 제공해 
 -- 데이터베이스의 검색 성능을 크게 향상시킴
 -- MySQL은 기본키(PK), 외래키(FK), 고유키(UK)에 자동으로 인덱스를 생성
--- 인덱스는 검색 및 정렬 성능을 향상시키는 장점도 있지만, 저장 공간을 많이 차지하는 단점도 있음
+-- 인덱스는 검색 및 정렬 성능을 향상시키는 장점도 있지만, 저장 공간을 많이 차지하고 쓰기 성능이 저하되는 단점도 있음
 -- 따라서 인덱스를 생성할 때는 성능과 저장 공간에 따른 비용의 두 요소를 고려해야 함
 -- 주로 WHERE 절에 자주 사용되는 컬럼이나 자주 조회하거나 자주 정렬하는 컬럼에만 인덱스를 생성
 -- 예: WHERE 조건, ORDER BY 목록 정렬 기준, JOIN 조건, 검색 조건(제목, 작성자 등)
@@ -349,10 +349,67 @@ ON users (email); -- 테이블 (인덱스 컬럼)
 CREATE DATABASE data_modeling;
 USE data_modeling;
 
+-- users 테이블 생성
+CREATE TABLE users (
+	id INTEGER AUTO_INCREMENT, 			-- 아이디(자동으로 1씩 증가)
+	email VARCHAR(100) NOT NULL UNIQUE, -- 이메일(필수 입력, 고유키 지정)
+	name VARCHAR(50) NOT NULL, 			-- 이름(필수 입력)
+	PRIMARY KEY (id) 					-- 기본키 지정: id
+);
 
+DESC users;
 
+-- orders 테이블 생성
+CREATE TABLE orders (
+	id INTEGER AUTO_INCREMENT, 			-- 아이디(자동으로 1씩 증가)
+	status VARCHAR(50), 				-- 주문 상태
+	created_at DATETIME, 				-- 주문 일시
+	user_id INTEGER NOT NULL, 			-- 사용자 아이디(필수 입력) <- 필수적 일대일 관계
+	PRIMARY KEY (id), 					-- 기본키 지정: id
+	FOREIGN KEY (user_id) REFERENCES users(id) 	-- 외래키 지정: user_id
+);
 
+DESC orders;
 
+-- payments 테이블 생성(orders와 1:1 관계)
+CREATE TABLE payments (
+	id INTEGER AUTO_INCREMENT, 			-- 아이디(자동으로 1씩 증가)
+	amount INTEGER NOT NULL, 			-- 결제 금액(필수 입력)
+	payment_type VARCHAR(50) NOT NULL, 	-- 결제 유형(필수 입력)
+	order_id INTEGER NOT NULL UNIQUE, 	-- 주문 아이디(필수 입력, 고유키 지정) <-- 필수적 일대일 관계
+	PRIMARY KEY (id), 					-- 기본키 지정: id
+	FOREIGN KEY (order_id) REFERENCES orders(id) -- 외래키 지정: order_id
+);
+
+DESC payments;
+
+-- products 테이블 생성
+CREATE TABLE products (
+	id INTEGER AUTO_INCREMENT, 					-- 아이디(자동으로 1씩 증가)
+	name VARCHAR(50) NOT NULL UNIQUE, 			-- 상품명(필수 입력, 고유키 지정)
+	price INTEGER NOT NULL CHECK(price > 0), 	-- 가격(필수 입력, 양수만 허용)
+	product_type VARCHAR(50) DEFAULT 'NONE', 	-- 상품 유형(기본값 NONE)
+	PRIMARY KEY (id), 							-- 기본키 지정: id
+	INDEX idx_product_name (name) 				-- 인덱스 생성: name
+	-- idx_product_name: 인덱스 명 작명
+);
+
+DESC products;
+
+-- order_details 테이블 생성
+CREATE TABLE order_details (
+	id INTEGER AUTO_INCREMENT, 					-- 아이디(자동으로 1씩 증가)
+	order_id INTEGER NOT NULL, 					-- 주문 아이디(필수 입력) <-- 필수적 관계라
+	product_id INTEGER NOT NULL, 				-- 상품 아이디(필수 입력) <-- 필수적 관계라
+	count INTEGER NOT NULL CHECK(count > 0), 	-- 수량(필수 입력, 양수만 허용)
+	-- CHECK(count > 0): 상품 주문 시 최소 1개 이상이어야 함
+	PRIMARY KEY (id), 							-- 기본키 지정: id
+	FOREIGN KEY (order_id) REFERENCES orders(id), 		-- 외래키 지정: order_id
+	FOREIGN KEY (product_id) REFERENCES products(id), 	-- 외래키 지정: product_id
+	UNIQUE (order_id, product_id) 				-- 고유키 지정: order_id, product_id
+);
+
+DESC order_details;
 
 -- Quiz
 -- 4. 다음 빈칸에 들어갈 용어를 순서대로 고르시오. (예: ㄱㄴㄷㄹㅁ)
